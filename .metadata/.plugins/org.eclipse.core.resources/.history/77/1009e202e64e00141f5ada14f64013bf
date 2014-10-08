@@ -1,0 +1,10 @@
+
+
+
+public class Start {
+	
+	
+	public static void main(String[] args) {
+		new ChatSocket("10.32.114.11", 80);
+	}
+}

@@ -10,6 +10,9 @@ import java.util.Scanner;
 
 public class ChatSocket implements Runnable{
 
+	//"192.168.178.22"
+	private GUI gui;
+	
 	private Socket socket;
 	private PrintWriter writer;
 	private BufferedReader in;
@@ -19,24 +22,25 @@ public class ChatSocket implements Runnable{
 	private char[] input = new char[1];
 	
 	public ChatSocket(String addr, int port){
+		
 		s = new Scanner(System.in);
 		address = new InetSocketAddress(addr, port);
 		socket = new Socket();
-		
 	
 		start(); 
 		
 		System.out.println("Connected to:" + socket.getInetAddress() + " on port " + socket.getPort());
+		
+		gui = new GUI();
 			
 		try {
-			writer = new PrintWriter(socket.getOutputStream());
+			//writer = new PrintWriter(socket.getOutputStream());
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		
-		
+		run();	
 	}
 	
 	public void start(){
@@ -50,9 +54,14 @@ public class ChatSocket implements Runnable{
 	}
 	
 	public void send(String msg){
-		String f = s.next();
+		
 		System.out.println("sent: " + msg);
-		writer.print(f);
+		try {
+			socket.getOutputStream().write(msg.getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -74,8 +83,10 @@ public class ChatSocket implements Runnable{
 	@Override
 	public void run() {
 		while(connected){
-			String f = receive();
+			//String f = receive();
 			
+			if(gui.canSend())
+				send(gui.getText());
 			
 			connected = socket.isConnected();
 		}

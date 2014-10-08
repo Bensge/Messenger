@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 
 
 
@@ -5,6 +7,8 @@ public class Start {
 	
 	
 	public static void main(String[] args) {
-		new ChatSocket("10.32.114.11", 80);
+		System.out.print("Enter the IP you want to connect to:");
+		//"192.168.178.22"
+		new ChatSocket(new Scanner(System.in).next(), 1026);
 	}
 }
