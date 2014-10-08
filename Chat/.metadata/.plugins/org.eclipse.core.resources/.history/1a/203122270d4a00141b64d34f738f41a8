@@ -1,0 +1,61 @@
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+
+
+public class ChatSocket {
+
+	private Socket socket;
+	private PrintWriter writer;
+	private Scanner s;
+	private SocketAddress address;
+	
+	public ChatSocket(String addr, int port){
+		s = new Scanner(System.in);
+		address = new InetSocketAddress(addr, port);
+		socket = new Socket();
+		
+	
+		start(); 
+		
+		System.out.println(socket.isConnected());
+			
+		try {
+			writer = new PrintWriter(socket.getOutputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		String f = null;
+		while((f = receive()) != null){
+			send(f);
+		}
+	}
+	
+	public void start(){
+		try {
+			socket.connect(address);
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+	}
+	
+	public void send(String msg){
+		System.out.println("sent: " + msg);
+		writer.print(msg);
+		System.out.println(writer.checkError());
+		//writer.
+	}
+	
+	public String receive(){
+		
+		return s.next();
+	}
+
+}
