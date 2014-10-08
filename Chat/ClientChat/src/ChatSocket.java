@@ -1,3 +1,5 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -32,6 +34,13 @@ public class ChatSocket implements Runnable{
 		System.out.println("Connected to:" + socket.getInetAddress() + " on port " + socket.getPort());
 		
 		gui = new GUI();
+		
+		gui.setSendButtonListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0)
+			{
+				send(gui.getText());
+			}
+		});
 			
 		try {
 			//writer = new PrintWriter(socket.getOutputStream());
@@ -85,10 +94,13 @@ public class ChatSocket implements Runnable{
 		while(connected){
 			//String f = receive();
 			
-			if(gui.canSend())
-				send(gui.getText());
-			
 			connected = socket.isConnected();
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

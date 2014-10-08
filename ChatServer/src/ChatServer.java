@@ -99,7 +99,7 @@ public class ChatServer {
       //sizeof()
       while(!in.ready())
       {
-        
+        Thread.sleep(100);
       }
       System.out.println("Now ready!");
       while (true)
