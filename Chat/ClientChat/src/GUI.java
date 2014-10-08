@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 
 public class GUI extends JFrame {
 	private JTextField textField;
+	private JButton btnSend;
 	private boolean canSend = false;
 	/**
 	 * @wbp.nonvisual location=-290,194
@@ -65,12 +66,7 @@ public class GUI extends JFrame {
 		panel_1.add(textField);
 		textField.setColumns(10);
 		
-		JButton btnSend = new JButton("Send");
-		btnSend.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				canSend = true;
-			}
-		});
+		btnSend = new JButton("Send");
 		btnSend.setAlignmentY(Component.TOP_ALIGNMENT);
 		panel_1.add(btnSend);
 		pack();
@@ -83,5 +79,13 @@ public class GUI extends JFrame {
 
 	public boolean canSend() {
 		return canSend;
+	}
+	
+	public void setSendButtonListener(ActionListener listener)
+	{
+		if (btnSend.getActionListeners().length > 0)
+			btnSend.removeActionListener(btnSend.getActionListeners()[0]);
+		
+		btnSend.addActionListener(listener);
 	}
 }
