@@ -3,6 +3,21 @@ import java.io.*;
 
 public class ChatServer {
   
+  
+  // java.lang.Object shell size in bytes:
+  public static final int OBJECT_SHELL_SIZE   = 8;
+  public static final int OBJREF_SIZE         = 4;
+  public static final int LONG_FIELD_SIZE     = 8;
+  public static final int INT_FIELD_SIZE      = 4;
+  public static final int SHORT_FIELD_SIZE    = 2;
+  public static final int CHAR_FIELD_SIZE     = 2;
+  public static final int BYTE_FIELD_SIZE     = 1;
+  public static final int BOOLEAN_FIELD_SIZE  = 1;
+  public static final int DOUBLE_FIELD_SIZE   = 8;
+  public static final int FLOAT_FIELD_SIZE    = 4;
+  
+  
+  
   public static void main(String[] args)
   {
     ChatServer s = new ChatServer();
@@ -74,35 +89,27 @@ public class ChatServer {
   private void listen()
   {
     try { 
-      PrintWriter out =
-      new PrintWriter(clientSocket.getOutputStream(), true);
+      PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
       BufferedReader in = new BufferedReader( new InputStreamReader(clientSocket.getInputStream()) );
       
       char[] input = new char[1];
       
       System.out.println("Listening to client messages!");
-      
+      sizeof()
       while(!in.ready())
       {
         
       }
       System.out.println("Now ready!");
-      for(in.read(input,0,1); true; in.read(input,0,1))
+      while (true)
       {
+        in.read(input,0,1);
         System.out.println("received: " + input[0]);
-        switch (input[0]) {
-          case 'x': 
-          clientSocket.close();
-          break;
-          case 'y': 
-          out.print("YO YO YO LO");
-          break;
-          default: 
-          break;
-        } // end of switch
+        
       } //end of for loop
     } catch(Exception e){
       System.out.println("Error while reading client socket " + e.toString());
+      in.close();
     }
   }
 }
