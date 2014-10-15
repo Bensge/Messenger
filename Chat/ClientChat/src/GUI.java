@@ -31,8 +31,11 @@ import java.util.Date;
 
 
 public class GUI extends JFrame {
-  private JTextField textField;
+
+private static final long serialVersionUID = 1L;
+private JTextField textField;
   private JButton btnSend;
+<<<<<<< HEAD
   private JTable messageTable;
   /**
    * @wbp.nonvisual location=-290,194
@@ -42,10 +45,10 @@ public class GUI extends JFrame {
   /**
    * Launch the application.
    */
+=======
+  private boolean canSend = false;
+>>>>>>> FETCH_HEAD
 
-  /**
-   * Create the frame.
-   */
   public GUI() {
 	  
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
