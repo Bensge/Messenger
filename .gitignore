@@ -1,0 +1,6 @@
+
+*.class
+.metadata/*
+.metadata/.plugins/org.eclipse.core.resources/.snap
+
+*.ini
