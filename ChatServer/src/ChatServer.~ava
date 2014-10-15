@@ -107,7 +107,7 @@ public class ChatServer {
         int packetType = prePacket[0] | prePacket[1] >> 8 | prePacket[2] >> 16 | prePacket[3] >> 24;
         System.out.println("Packet type: " + packetType);
         
-        int packetSize = (prePacket[4+0] & 0xFF) >> 0 | (prePacket[4+1] & 0xFF) >> 8 | (prePacket[4+2] & 0xFF) >> 16 | (prePacket[4+3] & 0xFF) >> 24;
+        int packetSize = ((int)prePacket[4+0] & 0xFF) >> 0 | ((int)prePacket[4+1] & 0xFF) >> 8 | ((int)prePacket[4+2] & 0xFF) >> 16 | ((int)prePacket[4+3] & 0xFF) >> 24;
         System.out.println("Packet size: " + packetSize);
         
         byte[] messageBuffer = new byte[packetSize];
