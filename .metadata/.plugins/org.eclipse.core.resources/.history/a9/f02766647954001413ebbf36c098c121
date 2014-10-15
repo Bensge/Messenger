@@ -86,7 +86,7 @@ public class ChatSocket implements Runnable{
     byte[] res = new byte[toSend.length + prePacketSize];
     
     for(int b = 0; b < res.length; b++){
-    	res[b] = b < prePacketSize ? pre[b] : toSend[b - prePacketSize];
+    	res[b] = b < prePacketSize ? pre[b] : toSend[b - toSend.length - 1];
     }
     
     try{

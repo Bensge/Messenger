@@ -18,12 +18,21 @@ import java.awt.event.ActionEvent;
 
 
 public class GUI extends JFrame {
-
-private static final long serialVersionUID = 1L;
-private JTextField textField;
+  private JTextField textField;
   private JButton btnSend;
   private boolean canSend = false;
+  /**
+   * @wbp.nonvisual location=-290,194
+   */
+  
 
+  /**
+   * Launch the application.
+   */
+
+  /**
+   * Create the frame.
+   */
   public GUI() {
     setVisible(true);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
