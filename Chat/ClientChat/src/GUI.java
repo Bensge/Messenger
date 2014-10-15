@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FocusTraversalPolicy;
@@ -35,19 +36,20 @@ public class GUI extends JFrame {
 private static final long serialVersionUID = 1L;
 private JTextField textField;
   private JButton btnSend;
-
+  private DefaultTableModel model;
   private JTable messageTable;
+  private String username;
   /**
    * @wbp.nonvisual location=-290,194
    */
-  
 
   /**
    * Launch the application.
    */
 
-
   public GUI() {
+	  
+	username = Start.USERNAME;
 	  
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setBounds(100, 100, 800, 600);
@@ -56,7 +58,7 @@ private JTextField textField;
     Box topBox = Box.createHorizontalBox();
     
     Object[] columns = { "Time", "User", "Message" };
-    Object[][] rowData = { { "9:99", "Benno", "Hi, der Chat geht jetzt. "} };
+    Object[][] rowData = { { "9:99", username, "Hi, der Chat geht jetzt. "} };
     
     messageTable = new JTable(new DefaultTableModel(rowData, columns));
     messageTable.getColumnModel().getColumn(0).setMinWidth(10);
@@ -71,6 +73,7 @@ private JTextField textField;
     
     //messageTable.setMaximumSize(new Dimension(9999, 300));
     JScrollPane messageTableScroller = new JScrollPane(messageTable);
+    messageTableScroller.setBackground(Color.WHITE);
     messageTableScroller.setMinimumSize(new Dimension(350, 200));
     messageTableScroller.setPreferredSize(new Dimension(500, 220));
     
@@ -90,9 +93,10 @@ private JTextField textField;
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			DefaultTableModel model = (DefaultTableModel) messageTable.getModel();
+			
 			String date = new SimpleDateFormat("HH:mm").format(new Date());
-			model.addRow(new Object[]{date, "Benno", textField.getText()});
+			
+			addEntry(date, username, textField.getText());
 			textField.setText(null);
 		}
 	});
@@ -125,4 +129,15 @@ private JTextField textField;
     
     btnSend.addActionListener(listener);
   }
+
+public void write(String text) {
+	System.out.println("received: " + text);
+}
+
+public void addEntry(String date, String name, String text){
+	model = (DefaultTableModel) messageTable.getModel();
+	model.addRow(new Object[]{date, name, text});
+	
+	}
+
 }
