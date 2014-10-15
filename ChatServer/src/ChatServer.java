@@ -17,6 +17,8 @@ public class ChatServer {
   public static final int FLOAT_FIELD_SIZE    = 4;
   
   
+  public static final int MESSAGE_PACKET_ID = 0;
+  
   
   public static void main(String[] args)
   {
@@ -32,7 +34,25 @@ public class ChatServer {
   private BufferedInputStream in;
   
   /*HELPER*/
+  protected static int intFromBuffer(byte[] buffer, int offset)
+  {
+	  return (buffer[offset + 0] & 0xFF) << 0 | (buffer[offset + 1] & 0xFF) << 8 | (buffer[offset + 2] & 0xFF) << 16 | (buffer[offset + 3] & 0xFF) << 24;
+  }
   
+  protected static byte[] bufferFromInt(int i)
+  {
+	  byte[] buf = new byte[4];
+	  writeIntToBuffer(i, buf, 0);
+	  return buf;
+  }
+  
+  protected static void writeIntToBuffer(int i, byte[] buffer, int offset)
+  {
+	  buffer[offset + 0] = (byte) (i >> 0);
+	  buffer[offset + 1] = (byte) (i >> 8);
+	  buffer[offset + 2] = (byte) (i >> 16);
+	  buffer[offset + 3] = (byte) (i >> 24);
+  }
   
   /*METHODS*/
   public ChatServer()
@@ -110,31 +130,17 @@ public class ChatServer {
         in.read(prePacket,0,8);
         System.out.println("Received Pre-Packet!" + prePacket);
         
-        int packetType = (prePacket[0] & 0xFF) << 0 | (prePacket[1] & 0xFF) << 8 | (prePacket[2] & 0xFF) << 16 | (prePacket[3] & 0xFF) << 24;
+        int packetType = intFromBuffer(prePacket, 0);
         System.out.println("Packet type: " + packetType);
         
-        int packetSize = (prePacket[4+0] & 0xFF) << 0 | (prePacket[4+1] & 0xFF) << 8 | (prePacket[4+2] & 0xFF) << 16 | (prePacket[4+3] & 0xFF) << 24;
+        int packetSize = intFromBuffer(prePacket, 4);
         System.out.println("Packet size: " + packetSize);
         
-        /*
-        {
-        	//Debug code
-        	int b1 = prePacket[4 + 0] & 0xFF;
-        	int b2 = prePacket[4 + 1] & 0xFF;
-        	int b3 = prePacket[4 + 2] & 0xFF;
-        	int b4 = prePacket[4 + 3] & 0xFF;
-        	
-        	System.out.println("b1 = " + b1);
-        	System.out.println("b2 = " + b2);
-        	System.out.println("b3 = " + b3);
-        	System.out.println("b4 = " + b4);
-        }
-        */
         
         byte[] messageBuffer = new byte[packetSize];
         in.read(messageBuffer,0,packetSize);
         
-        String message =new String(messageBuffer);
+        String message = new String(messageBuffer);
         System.out.println("Message: " + message);
         
         

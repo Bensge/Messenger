@@ -11,6 +11,8 @@ import java.util.Scanner;
 
 
 public class ChatSocket implements Runnable{
+	
+  public static final int MESSAGE_PACKET_ID = 0;
   
   //"192.168.178.22"
   private GUI gui;
@@ -24,7 +26,7 @@ public class ChatSocket implements Runnable{
   private char[] input = new char[1];
   
   public ChatSocket(String addr, int port){
-    
+    System.out.println("ChatSocket(" + addr + "," + port + ")");
     s = new Scanner(System.in);
     address = new InetSocketAddress(addr, port);
     socket = new Socket();
@@ -68,8 +70,8 @@ public class ChatSocket implements Runnable{
     int[] prePacket = new int[prePacketSize];
     
     //art des gesendeten
-    prePacket[0] = 7;       
-    //länge des gesendeten
+    prePacket[0] = MESSAGE_PACKET_ID;       
+    //lï¿½nge des gesendeten
     prePacket[1] = toSend.length;  
     //prePacket[1] = 1000000;
     
