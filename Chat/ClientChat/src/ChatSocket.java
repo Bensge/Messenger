@@ -1,14 +1,11 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.util.Scanner;
 
 
 public class ChatSocket implements Runnable{
@@ -20,9 +17,7 @@ public class ChatSocket implements Runnable{
   private Thread receive;
   private BufferedInputStream in;
   private SocketAddress address;
-  private PrintWriter out;
   private boolean connected = false;
-  private char[] input = new char[1];
   
   public static final int INT_FIELD_SIZE = 4;
   
@@ -51,7 +46,7 @@ public class ChatSocket implements Runnable{
     try {
       socket.connect(address);
       connected = socket.isConnected();
-      out = new PrintWriter(socket.getOutputStream(), true);
+     
       in = new BufferedInputStream(socket.getInputStream() );
     } catch (IOException e) {
       
@@ -93,23 +88,8 @@ public class ChatSocket implements Runnable{
   public void sendText(String msg){
     //for text
     byte[] toSend = msg.getBytes();
-    int[] prePacket = new int[prePacketSize];
-    
-    //art des gesendeten
-    prePacket[0] = 7;       
-    //länge des gesendeten
-    prePacket[1] = toSend.length;  
-    //prePacket[1] = 1000000;
-    
-    byte[] pre = new byte[8];
-    for (int i = 0; i< 2; i++) {
-      int b = prePacket[i];
-      int pos = i * 4;
-      pre[pos] = (byte) (b);
-      pre[pos + 1] = (byte) (b >> 8);
-      pre[pos + 2] = (byte) (b >> 16);
-      pre[pos + 3] = (byte) (b >> 24);
-    } // end of for
+    byte[] pre = createPrePacket(7, toSend.length);
+  
     
     byte[] res = new byte[toSend.length + prePacketSize];
     
@@ -168,6 +148,26 @@ public class ChatSocket implements Runnable{
       }
   }
   
- 
+ public byte[] createPrePacket(int type, int sendLength){
+	 int[] prePacket = new int[prePacketSize];
+	    
+	    //art des gesendeten
+	    prePacket[0] = type;       
+	    //lï¿½nge des gesendeten
+	    prePacket[1] = sendLength;  
+	    //prePacket[1] = 1000000;
+	    
+	    byte[] pre = new byte[8];
+	    for (int i = 0; i< 2; i++) {
+	      int b = prePacket[i];
+	      int pos = i * 4;
+	      pre[pos] = (byte) (b);
+	      pre[pos + 1] = (byte) (b >> 8);
+	      pre[pos + 2] = (byte) (b >> 16);
+	      pre[pos + 3] = (byte) (b >> 24);
+	    } // end of for
+	    
+	    return pre;
+ }
   
 }

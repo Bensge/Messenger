@@ -30,6 +30,7 @@ private JTextField textField;
   private boolean canSend = false;
 
   public GUI() {
+	  String b;
     setVisible(true);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setBounds(100, 100, 800, 600);
