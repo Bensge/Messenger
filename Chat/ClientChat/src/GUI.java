@@ -1,9 +1,12 @@
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FocusTraversalPolicy;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JSplitPane;
 import javax.swing.BoxLayout;
 
@@ -14,12 +17,17 @@ import javax.swing.JTextField;
 
 import java.awt.Component;
 
+import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class GUI extends JFrame {
@@ -27,67 +35,94 @@ public class GUI extends JFrame {
 private static final long serialVersionUID = 1L;
 private JTextField textField;
   private JButton btnSend;
-  private boolean canSend = false;
+
+  private JTable messageTable;
+  /**
+   * @wbp.nonvisual location=-290,194
+   */
+  
+
+  /**
+   * Launch the application.
+   */
+
 
   public GUI() {
-	  String b;
-    setVisible(true);
+	  
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setBounds(100, 100, 800, 600);
-    getContentPane().setLayout(null);
+    getContentPane().setLayout(new BorderLayout());
     
-    JPanel panel = new JPanel();
-    panel.setBounds(0, 0, 782, 493);
-    getContentPane().add(panel);
+    Box topBox = Box.createHorizontalBox();
     
-    JLabel lblNewLabel = new JLabel("New label");
-    GroupLayout gl_panel = new GroupLayout(panel);
-    gl_panel.setHorizontalGroup(
-      gl_panel.createParallelGroup(Alignment.LEADING)
-        .addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 782, Short.MAX_VALUE)
-    );
-    gl_panel.setVerticalGroup(
-      gl_panel.createParallelGroup(Alignment.LEADING)
-        .addGroup(gl_panel.createSequentialGroup()
-          .addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
-          .addContainerGap())
-    );
-    panel.setLayout(gl_panel);
+    Object[] columns = { "Time", "User", "Message" };
+    Object[][] rowData = { { "9:99", "Benno", "Hi, der Chat geht jetzt. "} };
     
-    JPanel panel_1 = new JPanel();
-    panel_1.setBounds(0, 494, 782, 59);
-    getContentPane().add(panel_1);
-    panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
+    messageTable = new JTable(new DefaultTableModel(rowData, columns));
+    messageTable.getColumnModel().getColumn(0).setMinWidth(10);
+    messageTable.getColumnModel().getColumn(0).setMaxWidth(70);
+    messageTable.getColumnModel().getColumn(0).setWidth(55);
+    messageTable.getColumnModel().getColumn(0).setPreferredWidth(55);
+    
+    messageTable.getColumnModel().getColumn(1).setMinWidth(30);
+    messageTable.getColumnModel().getColumn(1).setMaxWidth(100);
+    messageTable.getColumnModel().getColumn(1).setWidth(60);
+    messageTable.getColumnModel().getColumn(1).setPreferredWidth(60);
+    
+    //messageTable.setMaximumSize(new Dimension(9999, 300));
+    JScrollPane messageTableScroller = new JScrollPane(messageTable);
+    messageTableScroller.setMinimumSize(new Dimension(350, 200));
+    messageTableScroller.setPreferredSize(new Dimension(500, 220));
+    
+    topBox.add(messageTableScroller);
+    
+    Box bottomBox = Box.createHorizontalBox();
     
     textField = new JTextField();
-    panel_1.add(textField);
-    textField.setColumns(10);
+    //50 is actually too small, but the group and with it the text field always has at least the button's height.
+    textField.setMaximumSize(new Dimension(9999, 50));
+    bottomBox.add(textField);
     
     btnSend = new JButton("Send");
-    btnSend.setAlignmentY(Component.TOP_ALIGNMENT);
-    panel_1.add(btnSend);
-    //pack();
+    //For send on enter button press.
+    getRootPane().setDefaultButton(btnSend);
+    btnSend.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			DefaultTableModel model = (DefaultTableModel) messageTable.getModel();
+			String date = new SimpleDateFormat("HH:mm").format(new Date());
+			model.addRow(new Object[]{date, "Benno", textField.getText()});
+			textField.setText(null);
+		}
+	});
+    bottomBox.add(btnSend);
+    
+    Box verticalBox = Box.createVerticalBox();
+    verticalBox.add(topBox);
+    verticalBox.add(bottomBox);
+    
+    getContentPane().add(verticalBox, BorderLayout.CENTER);
+    
+    pack();
+    
+    setVisible(true);
+    
+    textField.requestFocus(false);
+    textField.requestFocus();
   }
   
   public String getText(){
-    canSend = false;
-    return textField.getText().toString();
+    String string = textField.getText().toString();
+    return string;
   }
 
-  public boolean canSend() {
-    return canSend;
-  }
   
   public void setSendButtonListener(ActionListener listener)
   {
-    if (btnSend.getActionListeners().length > 0)
-      btnSend.removeActionListener(btnSend.getActionListeners()[0]);
+    if (btnSend.getActionListeners().length > 1)
+      btnSend.removeActionListener(btnSend.getActionListeners()[1]);
     
     btnSend.addActionListener(listener);
-  }
-
-  public void write(String msg) {
-	System.out.println("Server said: " + msg);
-	
   }
 }
