@@ -23,18 +23,25 @@ public class ChatServer {
     ChatServer s = new ChatServer();
   }
   
-  /*CONSTANTS*/
-  private final int port = 80;
+  /*NOT SO CONSTANT CONSTANTS*/
+  private int port = 80;
   
   /*IVARS*/
   private ServerSocket socket;
   private Socket clientSocket = null;
   private BufferedInputStream in;
   
+  /*HELPER*/
+  
+  
   /*METHODS*/
   public ChatServer()
   {
     //Hello
+	if (System.getProperty("os.name").startsWith("Mac"))
+	{
+		port = 1044;
+	}
     System.out.println("ChatServer by Justus & Benno");
     System.out.println("+----------------------------+");
     System.out.println("|           PREMIUM          |");
@@ -96,7 +103,6 @@ public class ChatServer {
       byte[] prePacket = new byte[INT_FIELD_SIZE * 2];
       
       System.out.println("Listening to client messages!");
-      //sizeof()
       
       System.out.println("Now ready!");
       while (true)
@@ -104,11 +110,26 @@ public class ChatServer {
         in.read(prePacket,0,8);
         System.out.println("Received Pre-Packet!" + prePacket);
         
-        int packetType = prePacket[0] | prePacket[1] >> 8 | prePacket[2] >> 16 | prePacket[3] >> 24;
+        int packetType = (prePacket[0] & 0xFF) << 0 | (prePacket[1] & 0xFF) << 8 | (prePacket[2] & 0xFF) << 16 | (prePacket[3] & 0xFF) << 24;
         System.out.println("Packet type: " + packetType);
         
-        int packetSize = (prePacket[4+0] & 0xFF) >> 0 | (prePacket[4+1] & 0xFF) >> 8 | (prePacket[4+2] & 0xFF) >> 16 | (prePacket[4+3] & 0xFF) >> 24;
+        int packetSize = (prePacket[4+0] & 0xFF) << 0 | (prePacket[4+1] & 0xFF) << 8 | (prePacket[4+2] & 0xFF) << 16 | (prePacket[4+3] & 0xFF) << 24;
         System.out.println("Packet size: " + packetSize);
+        
+        /*
+        {
+        	//Debug code
+        	int b1 = prePacket[4 + 0] & 0xFF;
+        	int b2 = prePacket[4 + 1] & 0xFF;
+        	int b3 = prePacket[4 + 2] & 0xFF;
+        	int b4 = prePacket[4 + 3] & 0xFF;
+        	
+        	System.out.println("b1 = " + b1);
+        	System.out.println("b2 = " + b2);
+        	System.out.println("b3 = " + b3);
+        	System.out.println("b4 = " + b4);
+        }
+        */
         
         byte[] messageBuffer = new byte[packetSize];
         in.read(messageBuffer,0,packetSize);
