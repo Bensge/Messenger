@@ -78,7 +78,6 @@ public class ChatServer {
     //Check socket
     if (clientSocket != null) {
       System.out.println("Client connected: " + clientSocket.toString());
-      
     } // end of if
     
   }
@@ -98,7 +97,6 @@ public class ChatServer {
   private void listen()
   {
     try { 
-    clientSocket.getOutputStream().write("hellololololo".getBytes());
       PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
       in = new BufferedInputStream(clientSocket.getInputStream() );
       

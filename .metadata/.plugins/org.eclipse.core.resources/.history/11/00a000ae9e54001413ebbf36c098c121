@@ -6,18 +6,13 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JSplitPane;
 import javax.swing.BoxLayout;
-
 import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JTextField;
-
 import java.awt.Component;
-
 import javax.swing.JLabel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -83,10 +78,5 @@ private JTextField textField;
       btnSend.removeActionListener(btnSend.getActionListeners()[0]);
     
     btnSend.addActionListener(listener);
-  }
-
-  public void write(String msg) {
-	System.out.println("Server said: " + msg);
-	
   }
 }

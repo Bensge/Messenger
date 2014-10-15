@@ -67,7 +67,6 @@ public class ChatSocket implements Runnable{
   		public void run() {
   			String msg;
   			while(true){
-  				System.out.println("lulu");
   				String text = receive();
   				if(text != null)
   					gui.write(text);
@@ -75,7 +74,6 @@ public class ChatSocket implements Runnable{
   			}
   		}
   	});	
-	  receive.start();
 	  
     while(connected){
       //String f = receive();	

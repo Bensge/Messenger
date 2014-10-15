@@ -4,7 +4,6 @@ INDEX VERSION 1.127+C:\Users\Justus\Documents\GitHub\Messenger\.metadata\.plugin
 4267283917.index
 4108727661.index
 3133528496.index
-1668301934.index
 1752465057.index
 3974580528.index
 305854171.index

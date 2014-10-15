@@ -62,23 +62,18 @@ public class ChatSocket implements Runnable{
   @Override
   public void run() {
 	 
-	  receive = new Thread(new Runnable() {	
-  		@Override
-  		public void run() {
-  			String msg;
-  			while(true){
-  				System.out.println("lulu");
-  				String text = receive();
-  				if(text != null)
-  					gui.write(text);
-  				System.out.println("lala");
-  			}
-  		}
-  	});	
-	  receive.start();
-	  
     while(connected){
-      //String f = receive();	
+      //String f = receive();
+    	receive = new Thread(new Runnable() {	
+    		@Override
+    		public void run() {
+    			String msg;
+    			while((msg = receive()) != null){}
+    			
+    			gui.write(msg);
+    		}
+    	});	
+    	
       
       connected = socket.isConnected();
       try {
