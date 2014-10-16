@@ -1,14 +1,33 @@
 import java.net.*;
+import java.util.ArrayList;
+import java.awt.EventQueue;
 import java.io.*;
+
+import javax.swing.SwingWorker;
 
 public class ChatServer {
   
   public static final int MESSAGE_PACKET_ID = 0;
   
   
-  public static void main(String[] args)
+  public static void main(String[] args) throws Exception
   {
-    ChatServer s = new ChatServer();
+	  EventQueue.invokeLater(new Runnable() {
+		@Override
+		public void run() {
+			try {
+				ChatServer s = new ChatServer();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	  });
+	  
+	  while(true)
+	  {
+		  //This is stupid. Stupid, stupid, stupid!
+		  Thread.sleep(1000);
+	  }
   }
   
   /*NOT SO CONSTANT CONSTANTS*/
@@ -16,14 +35,13 @@ public class ChatServer {
   
   /*IVARS*/
   private ServerSocket socket;
-  private Socket clientSocket = null;
-  private BufferedInputStream in;
   
+  private ArrayList<ClientReadingWorker> clients = new ArrayList<ClientReadingWorker>();
   /*HELPER*/
 
   
   /*METHODS*/
-  public ChatServer()
+  public ChatServer() throws Exception
   {
     //Hello
 	if (System.getProperty("os.name").startsWith("Mac"))
@@ -35,11 +53,13 @@ public class ChatServer {
     System.out.println("|           PREMIUM          |");
     System.out.println("+----------------------------+\n");
     
-    while (true) {
+    //while (true) {
       startUp();
       listen();
-      tearDown(); 
-    }
+      //tearDown(); 
+    //}
+      
+     System.out.println("ChatServer: Bye bye!");
   }
   
   private void startUp()
@@ -56,19 +76,6 @@ public class ChatServer {
     } catch(Exception e) {
       System.out.println("Error getting local IP address: " + e.toString());
     }
-    //Accept connections
-    try { 
-      clientSocket = socket.accept();
-    } catch(Exception e) {
-      System.out.println("Error accepting from socket: " + e.toString());
-    }
-    
-    //Check socket
-    if (clientSocket != null) {
-      System.out.println("Client connected: " + clientSocket.toString());
-      
-    } // end of if
-    
   }
   
   private void tearDown()
@@ -83,45 +90,29 @@ public class ChatServer {
     } // end of try
   }
   
-  private void listen()
+  private void listen() throws Exception
   {
-    try { 
-    clientSocket.getOutputStream().write("hellololololo".getBytes());
-      PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-      in = new BufferedInputStream(clientSocket.getInputStream() );
-      
-      byte[] prePacket = new byte[MessengerCommon.INT_FIELD_SIZE * 2];
-      
-      System.out.println("Listening to client messages!");
-      
-      System.out.println("Now ready!");
-      while (true)
-      {
-        in.read(prePacket,0,8);
-        System.out.println("Received Pre-Packet!" + prePacket);
-        
-        int packetType = MessengerCommon.intFromBuffer(prePacket, 0);
-        System.out.println("Packet type: " + packetType);
-        
-        int packetSize = MessengerCommon.intFromBuffer(prePacket, 4);
-        System.out.println("Packet size: " + packetSize);
-        
-        
-        byte[] messageBuffer = new byte[packetSize];
-        in.read(messageBuffer,0,packetSize);
-        
-        String message = new String(messageBuffer);
-        System.out.println("Message: " + message);
-        
-        
-      } //end of for loop
-    } catch(Exception e){
-      System.out.println("Error while reading client socket " + e.toString());
-      try {
-        in.close();
-      } catch (IOException e1) {
-        e1.printStackTrace();
-      }
-    }
+	  SocketAcceptWorker acceptWorker = new SocketAcceptWorker(socket,this);
+	  acceptWorker.execute();
   }
+  
+  public void registerClient(ClientReadingWorker clientWorker)
+  {
+	  clients.add(clientWorker);
+  }
+  
+  public void processMessage(ClientReadingWorker sender, String message)
+  {
+	  System.out.println("Processing message...");
+	  for (ClientReadingWorker client : clients)
+	  {
+		  if (client != sender)
+		  {
+			  ClientWritingWorker writer = new ClientWritingWorker(client.out, message);
+			  writer.execute();
+			  System.out.println("Sending message soon...");
+		  }
+	  }
+  }
+  
 }

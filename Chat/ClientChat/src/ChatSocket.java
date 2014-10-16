@@ -6,6 +6,8 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class ChatSocket implements Runnable{
@@ -36,7 +38,11 @@ public class ChatSocket implements Runnable{
       }
     });
     
-    run();  
+    
+    //Let's go a different route here.
+    //run();  
+    ServerReadingWorker reader = new ServerReadingWorker(in, this);
+    reader.execute();
   }
   
   public void start(){
@@ -101,7 +107,7 @@ public class ChatSocket implements Runnable{
   
   public String receive(){
     
-    try { 
+    try {
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedInputStream(socket.getInputStream() );
         
@@ -139,5 +145,12 @@ public class ChatSocket implements Runnable{
         }
         return null;
       }
+  }
+  
+  public void processMessage(String msg)
+  {
+	  System.out.println("GOT MESSAGE YES YES YES");
+	  String date = new SimpleDateFormat("HH:mm").format(new Date());
+	  gui.addEntry(date, "Not you", msg);
   }
 }
