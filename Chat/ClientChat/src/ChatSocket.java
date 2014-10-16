@@ -12,14 +12,11 @@ public class ChatSocket implements Runnable{
   
   //"192.168.178.22"
   private GUI gui;
-  private final int prePacketSize = 8;
   private Socket socket;
   private Thread receive;
   private BufferedInputStream in;
   private SocketAddress address;
   private boolean connected = false;
-  
-  public static final int INT_FIELD_SIZE = 4;
   
   public ChatSocket(String addr, int port){
     
@@ -88,21 +85,17 @@ public class ChatSocket implements Runnable{
   public void sendText(String msg){
     //for text
     byte[] toSend = msg.getBytes();
-    byte[] pre = createPrePacket(7, toSend.length);
-  
+    byte[] pre = MessengerCommon.createPrePacket(7, toSend.length);
     
-    byte[] res = new byte[toSend.length + prePacketSize];
+    byte[] res = MessengerCommon.mergeBuffers(pre, toSend);
     
-    for(int b = 0; b < res.length; b++){
-    	res[b] = b < prePacketSize ? pre[b] : toSend[b - prePacketSize];
-    }
-    
-    try{
+    try {
       socket.getOutputStream().write(pre);
       socket.getOutputStream().write(toSend);
-      
     }
-    catch(Exception e){}
+    catch(Exception e){
+    	System.out.println("Error sending message: " + e.toString());
+    }
     System.out.println("sent: " + msg);
   }
   
@@ -112,7 +105,7 @@ public class ChatSocket implements Runnable{
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedInputStream(socket.getInputStream() );
         
-        byte[] prePacket = new byte[INT_FIELD_SIZE * 2];
+        byte[] prePacket = new byte[MessengerCommon.INT_FIELD_SIZE * 2];
         
         System.out.println("Listening to client messages!");
         
@@ -147,27 +140,4 @@ public class ChatSocket implements Runnable{
         return null;
       }
   }
-  
- public byte[] createPrePacket(int type, int sendLength){
-	 int[] prePacket = new int[prePacketSize];
-	    
-	    //art des gesendeten
-	    prePacket[0] = type;       
-	    //l�nge des gesendeten
-	    prePacket[1] = sendLength;  
-	    //prePacket[1] = 1000000;
-	    
-	    byte[] pre = new byte[8];
-	    for (int i = 0; i< 2; i++) {
-	      int b = prePacket[i];
-	      int pos = i * 4;
-	      pre[pos] = (byte) (b);
-	      pre[pos + 1] = (byte) (b >> 8);
-	      pre[pos + 2] = (byte) (b >> 16);
-	      pre[pos + 3] = (byte) (b >> 24);
-	    } // end of for
-	    
-	    return pre;
- }
-  
 }

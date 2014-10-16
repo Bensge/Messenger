@@ -3,20 +3,6 @@ import java.io.*;
 
 public class ChatServer {
   
-  
-  // java.lang.Object shell size in bytes:
-  public static final int OBJECT_SHELL_SIZE   = 8;
-  public static final int OBJREF_SIZE         = 4;
-  public static final int LONG_FIELD_SIZE     = 8;
-  public static final int INT_FIELD_SIZE      = 4;
-  public static final int SHORT_FIELD_SIZE    = 2;
-  public static final int CHAR_FIELD_SIZE     = 2;
-  public static final int BYTE_FIELD_SIZE     = 1;
-  public static final int BOOLEAN_FIELD_SIZE  = 1;
-  public static final int DOUBLE_FIELD_SIZE   = 8;
-  public static final int FLOAT_FIELD_SIZE    = 4;
-  
-  
   public static final int MESSAGE_PACKET_ID = 0;
   
   
@@ -34,25 +20,7 @@ public class ChatServer {
   private BufferedInputStream in;
   
   /*HELPER*/
-  protected static int intFromBuffer(byte[] buffer, int offset)
-  {
-	  return (buffer[offset + 0] & 0xFF) << 0 | (buffer[offset + 1] & 0xFF) << 8 | (buffer[offset + 2] & 0xFF) << 16 | (buffer[offset + 3] & 0xFF) << 24;
-  }
-  
-  protected static byte[] bufferFromInt(int i)
-  {
-	  byte[] buf = new byte[4];
-	  writeIntToBuffer(i, buf, 0);
-	  return buf;
-  }
-  
-  protected static void writeIntToBuffer(int i, byte[] buffer, int offset)
-  {
-	  buffer[offset + 0] = (byte) (i >> 0);
-	  buffer[offset + 1] = (byte) (i >> 8);
-	  buffer[offset + 2] = (byte) (i >> 16);
-	  buffer[offset + 3] = (byte) (i >> 24);
-  }
+
   
   /*METHODS*/
   public ChatServer()
@@ -122,7 +90,7 @@ public class ChatServer {
       PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
       in = new BufferedInputStream(clientSocket.getInputStream() );
       
-      byte[] prePacket = new byte[INT_FIELD_SIZE * 2];
+      byte[] prePacket = new byte[MessengerCommon.INT_FIELD_SIZE * 2];
       
       System.out.println("Listening to client messages!");
       
@@ -132,10 +100,10 @@ public class ChatServer {
         in.read(prePacket,0,8);
         System.out.println("Received Pre-Packet!" + prePacket);
         
-        int packetType = intFromBuffer(prePacket, 0);
+        int packetType = MessengerCommon.intFromBuffer(prePacket, 0);
         System.out.println("Packet type: " + packetType);
         
-        int packetSize = intFromBuffer(prePacket, 4);
+        int packetSize = MessengerCommon.intFromBuffer(prePacket, 4);
         System.out.println("Packet size: " + packetSize);
         
         
