@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Move 2 elements to &apos;ChatClient/src/(default package)&apos;&#x0D;&#x0A;- Original project: &apos;ChatServer&apos;&#x0D;&#x0A;- Destination element: &apos;ChatClient/src/(default package)&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     Start.java&#x0D;&#x0A;     ChatSocket.java&#x0D;&#x0A;- Update references to refactored element" description="Move compilation units" destination="=ChatClient/src&lt;" element1="/src&lt;{Start.java" element2="/src&lt;{ChatSocket.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1412771052730" units="2" version="1.0"/>
-</session>
