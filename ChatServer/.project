@@ -14,11 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src/MessengerCommon.java</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/MessengerCommon.java</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>

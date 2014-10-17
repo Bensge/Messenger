@@ -13,6 +13,8 @@ public class MessengerCommon
 	  
 	  public static final int prePacketSize = 2 * INT_FIELD_SIZE;
 	  
+	  public static final int MESSAGE_PACKET_ID = 7;
+	  
 	  /*HELPER*/
 	  public static int intFromBuffer(byte[] buffer, int offset)
 	  {

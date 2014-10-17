@@ -109,12 +109,12 @@ public class ChatServer {
 	  System.out.println("Processing message...");
 	  for (Client client : clients)
 	  {
-		  if (client.getCreader() != sender)
+		  if (client.getReader() != sender)
 		  {
 			 // ClientWritingWorker writer = new ClientWritingWorker(client.out, message);
-			 client.setCWriter(new ClientWritingWorker(sender.out, message));
+			 client.setWriter(new ClientWritingWorker(client.getReader().out, message));
 			 // writer.execute();
-			  client.getCWriter().execute();
+			  client.getWriter().execute();
 			  System.out.println("Sending message soon...");
 		  }
 	  }

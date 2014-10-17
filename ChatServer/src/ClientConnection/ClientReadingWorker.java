@@ -32,9 +32,18 @@ public class ClientReadingWorker extends SwingWorker<Void, String> {
 	    while (true)
 	    {
 	        in.read(prePacket,0,8);
-	        System.out.println("Received Pre-Packet!" + prePacket);
 	        
 	        int packetType = MessengerCommon.intFromBuffer(prePacket, 0);
+	        
+	        if (packetType == 0)
+	        {
+	        	//Got invalid packet
+	        	continue;
+	        }
+	        
+	        System.out.println("Received Pre-Packet!" + prePacket);
+	        
+	        
 	        System.out.println("Packet type: " + packetType);
 	        
 	        int packetSize = MessengerCommon.intFromBuffer(prePacket, 4);

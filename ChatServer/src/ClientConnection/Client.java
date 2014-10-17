@@ -1,34 +1,32 @@
 package ClientConnection;
 
+
 public class Client {
-	private ClientReadingWorker Creader;
-	private ClientWritingWorker CWriter;
 	
+	private ClientReadingWorker reader;
+	private ClientWritingWorker writer;
 	
 	
 	public Client(ClientReadingWorker reader){
-		
+		this.reader = reader;
 	}
 	
 
 	
-	public ClientReadingWorker getCreader() {
-		return Creader;
+	public ClientReadingWorker getReader() {
+		return reader;
 	}
 	
-	public ClientWritingWorker getCWriter() {
-		return CWriter;
+	public ClientWritingWorker getWriter() {
+		return writer;
 	}
 
-	public void setCWriter(ClientWritingWorker clientWritingWorker) {
-		
-		
+	public void setWriter(ClientWritingWorker clientWritingWorker) {
+		writer = clientWritingWorker;
 	}
 	
-	public void setCReader(ClientReadingWorker clientReadingWorker) {
-		
-		
+	public void setReader(ClientReadingWorker clientReadingWorker) {
+		reader = clientReadingWorker;
 	}
-	
 	
 }

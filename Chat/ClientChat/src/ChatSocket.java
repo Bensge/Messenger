@@ -81,7 +81,7 @@ public class ChatSocket implements Runnable{
   public void sendText(String msg){
     //for text
     byte[] toSend = msg.getBytes();
-    byte[] pre = MessengerCommon.createPrePacket(7, toSend.length);
+    byte[] pre = MessengerCommon.createPrePacket(MessengerCommon.MESSAGE_PACKET_ID, toSend.length);
     
     byte[] res = MessengerCommon.mergeBuffers(pre, toSend);
     
@@ -111,16 +111,16 @@ public class ChatSocket implements Runnable{
           in.read(prePacket,0,8);
           System.out.println("Received Pre-Packet!" + prePacket);
           
-          int packetType = (prePacket[0] & 0xFF) << 0 | (prePacket[1] & 0xFF) << 8 | (prePacket[2] & 0xFF) << 16 | (prePacket[3] & 0xFF) << 24;
+          int packetType = MessengerCommon.intFromBuffer(prePacket, 0);
           System.out.println("Packet type: " + packetType);
           
-          int packetSize = (prePacket[4+0] & 0xFF) << 0 | (prePacket[4+1] & 0xFF) << 8 | (prePacket[4+2] & 0xFF) << 16 | (prePacket[4+3] & 0xFF) << 24;
+          int packetSize = MessengerCommon.intFromBuffer(prePacket, 4);
           System.out.println("Packet size: " + packetSize);
      
           byte[] messageBuffer = new byte[packetSize];
           in.read(messageBuffer,0,packetSize);
           
-          String message =new String(messageBuffer);
+          String message = new String(messageBuffer);
           System.out.println("Message: " + message);
           return message;
           
@@ -139,7 +139,6 @@ public class ChatSocket implements Runnable{
   
   public void processMessage(String msg)
   {
-	  System.out.println("GOT MESSAGE YES YES YES");
 	  String date = new SimpleDateFormat("HH:mm").format(new Date());
 	  gui.addEntry(date, "Not you", msg);
   }
