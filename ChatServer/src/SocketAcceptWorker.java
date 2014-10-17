@@ -23,7 +23,6 @@ public class SocketAcceptWorker extends SwingWorker<Void, ClientReadingWorker> {
 
 	@Override
 	protected Void doInBackground() throws Exception {
-		System.out.println("Hi from SocketAcceptWriter!");
 		while (true)
 		{
 			try
