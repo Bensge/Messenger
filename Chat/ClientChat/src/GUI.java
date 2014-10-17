@@ -38,7 +38,7 @@ private JTextField textField;
   private JButton btnSend;
   private DefaultTableModel model;
   private JTable messageTable;
-  private String username;
+  public String username;
   /**
    * @wbp.nonvisual location=-290,194
    */

@@ -15,7 +15,6 @@ public class ChatSocket implements Runnable{
   //"192.168.178.22"
   private GUI gui;
   private Socket socket;
-  private Thread receive;
   private BufferedInputStream in;
   private SocketAddress address;
   private boolean connected = false;
@@ -51,6 +50,12 @@ public class ChatSocket implements Runnable{
       connected = socket.isConnected();
      
       in = new BufferedInputStream(socket.getInputStream() );
+      
+      //if(gui.username.equals(""))
+    	//  gui.username = "unknown";
+      
+      //sendText(gui.username);
+     
     } catch (IOException e) {
       
       e.printStackTrace();
@@ -59,21 +64,6 @@ public class ChatSocket implements Runnable{
   
   @Override
   public void run() {
-	 
-	  receive = new Thread(new Runnable() {	
-  		@Override
-  		public void run() {
-  			String msg;
-  			while(true){
-  				System.out.println("lulu");
-  				String text = receive();
-  				if(text != null)
-  					gui.write(text);
-  				System.out.println("lala");
-  			}
-  		}
-  	});	
-	  receive.start();
 	  
     while(connected){
       //String f = receive();	
