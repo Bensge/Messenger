@@ -1,10 +1,12 @@
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
 
 import javax.swing.SwingWorker;
+
 
 
 public class SocketAcceptWorker extends SwingWorker<Void, ClientReadingWorker> {
@@ -30,7 +32,7 @@ public class SocketAcceptWorker extends SwingWorker<Void, ClientReadingWorker> {
 				if (client != null)
 				{
 					BufferedInputStream in = new BufferedInputStream(client.getInputStream());
-					BufferedOutputStream out = new BufferedOutputStream(client.getOutputStream());
+					OutputStream out = client.getOutputStream();
 					
 					ClientReadingWorker worker = new ClientReadingWorker(in, out, server);
 					worker.execute();

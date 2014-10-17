@@ -1,14 +1,15 @@
 import java.io.BufferedOutputStream;
+import java.io.OutputStream;
 
 import javax.swing.SwingWorker;
 
 
 public class ClientWritingWorker extends SwingWorker<Void, Void> {
 
-	private BufferedOutputStream out;
+	private OutputStream out;
 	private String message;
 	
-	public ClientWritingWorker(BufferedOutputStream out, String message) {
+	public ClientWritingWorker(OutputStream out, String message) {
 		this.out = out;
 		this.message = message;
 	}

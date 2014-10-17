@@ -1,6 +1,7 @@
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import javax.swing.SwingWorker;
@@ -9,10 +10,10 @@ import javax.swing.SwingWorker;
 public class ClientReadingWorker extends SwingWorker<Void, String> {
 
 	private BufferedInputStream in;
-	public BufferedOutputStream out;
+	public OutputStream out;
 	private ChatServer server;
 	
-	public ClientReadingWorker(BufferedInputStream in, BufferedOutputStream out, ChatServer server) {
+	public ClientReadingWorker(BufferedInputStream in, OutputStream out, ChatServer server) {
 		this.in = in;
 		this.out = out;
 		this.server = server;
