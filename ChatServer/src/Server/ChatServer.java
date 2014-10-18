@@ -8,6 +8,7 @@ import ClientConnection.ClientReadingWorker;
 import ClientConnection.ClientWritingWorker;
 import Common.ChatPacket;
 import Common.MessageImagePacket;
+import Common.MessageLoginPacket;
 import Common.MessageReceivePacket;
 import Common.MessageSendPacket;
 import Common.MessengerCommon;
@@ -107,12 +108,12 @@ public class ChatServer {
   {
 	  clients.add(client);
 	  
-	  //Notify other clients
+	 /* //Notify other clients
 	  MessageReceivePacket packet = new MessageReceivePacket();
 	  packet.sender = "Server";
 	  packet.text = "User joined!";
 	  packet.timestamp = MessengerCommon.currentUnixTime();
-	  sendPacketToClientsBut(client, packet);
+	  sendPacketToClientsBut(client, packet);*/
   }
   
   public void unregisterClient(Client client)
@@ -122,7 +123,7 @@ public class ChatServer {
 	  //Notify other clients
 	  MessageReceivePacket packet = new MessageReceivePacket();
 	  packet.sender = "Server";
-	  packet.text = "User left!";
+	  packet.text = "User " + client.getName() + " left!";
 	  packet.timestamp = MessengerCommon.currentUnixTime();
 	  sendPacketToClientsBut(client, packet);
   }
@@ -137,7 +138,20 @@ public class ChatServer {
 		  MessageReceivePacket p = new MessageReceivePacket();
 		  p.text = ((MessageSendPacket) packet).text;
 		  p.timestamp = MessengerCommon.currentUnixTime();
-		  p.sender = "Howouldiknow";
+		  p.sender = sender.getName();
+		  newPacket = p;
+	  }
+	  else if(packet instanceof MessageLoginPacket){
+		  //get name of packet
+		  sender.setName(((MessageLoginPacket) packet).name);
+		  
+		  
+		  //Notify other clients
+		  MessageReceivePacket p = new MessageReceivePacket();
+		  p.sender = "Server";
+		  p.text = "User " + sender.getName() + " joined!";
+		  p.timestamp = MessengerCommon.currentUnixTime();
+		 // sendPacketToClientsBut(client, packet);
 		  newPacket = p;
 	  }
 	  else if (packet instanceof MessageImagePacket)

@@ -22,7 +22,6 @@ public class ClientWritingWorker extends SwingWorker<Void, Void> {
 		try {
 			byte[] messagePacket = packet.generateDataPacket();
 			byte[] prePacket = packet.generatePrePacket();
-			
 			out.write(prePacket);
 			out.write(messagePacket);
 			System.out.println("Sent message to client");

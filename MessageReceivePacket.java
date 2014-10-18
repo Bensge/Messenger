@@ -1,7 +1,7 @@
 package Common;
 
 public class MessageReceivePacket extends MessageSendPacket {
-	public static int packetID = 2;
+	public static int packetID = 3;
 	
 	public String sender;
 	public int timestamp;

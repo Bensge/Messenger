@@ -1,7 +1,7 @@
 package Common;
 
 public class MessageSendPacket extends ChatPacket {
-	public static int packetID = 1;
+	public static int packetID = 2;
 	
 	public String text;
 	
