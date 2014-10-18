@@ -104,6 +104,11 @@ public class ChatServer {
 	  //clients.get(clients.size()).setCWriter(clientWritingWorker);
   }
   
+  public void unregisterClient(Client client)
+  {
+	  clients.remove(client);
+  }
+  
   public void processMessage(ClientReadingWorker sender, String message)
   {
 	  System.out.println("Processing message...");

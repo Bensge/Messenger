@@ -2,7 +2,9 @@ package ClientConnection;
 import Server.MessengerCommon;
 
 import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.SwingWorker;
@@ -12,11 +14,12 @@ import Server.ChatServer;
 
 public class ClientReadingWorker extends SwingWorker<Void, String> {
 
-	private BufferedInputStream in;
+	private InputStream in;
 	public OutputStream out;
 	private ChatServer server;
+	public Client client;
 	
-	public ClientReadingWorker(BufferedInputStream in, OutputStream out, ChatServer server) {
+	public ClientReadingWorker(InputStream in, OutputStream out, ChatServer server) {
 		this.in = in;
 		this.out = out;
 		this.server = server;
@@ -31,7 +34,16 @@ public class ClientReadingWorker extends SwingWorker<Void, String> {
 	    System.out.println("Now ready!");
 	    while (true)
 	    {
-	        in.read(prePacket,0,8);
+	    	//Clean out prePacket for the case that it's filled with the old package.
+	    	Arrays.fill( prePacket, (byte) 0 );
+	        int result = in.read(prePacket,0,8);
+	        
+	        if (result == -1)
+	        {
+	        	System.out.println("Client disconnected!");
+	        	//It's been great talking to you, Client!
+	        	break;
+	        }
 	        
 	        int packetType = MessengerCommon.intFromBuffer(prePacket, 0);
 	        
@@ -42,7 +54,6 @@ public class ClientReadingWorker extends SwingWorker<Void, String> {
 	        }
 	        
 	        System.out.println("Received Pre-Packet!" + prePacket);
-	        
 	        
 	        System.out.println("Packet type: " + packetType);
 	        
@@ -56,6 +67,8 @@ public class ClientReadingWorker extends SwingWorker<Void, String> {
 	        
 	        publish(message);
 	    }
+	    
+	    return null;
 	}
 	
 	@Override
@@ -65,6 +78,11 @@ public class ClientReadingWorker extends SwingWorker<Void, String> {
 		{
 			server.processMessage(this, msg);
 		}
+	}
+	
+	@Override
+	protected void done() {
+		server.unregisterClient(this.client);
 	}
 
 }

@@ -1,6 +1,7 @@
 package Server;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -36,7 +37,7 @@ public class SocketAcceptWorker extends SwingWorker<Void, ClientReadingWorker> {
 				Socket client = socket.accept();
 				if (client != null)
 				{
-					BufferedInputStream in = new BufferedInputStream(client.getInputStream());
+					InputStream in = client.getInputStream();
 					OutputStream out = client.getOutputStream();
 					
 					ClientReadingWorker worker = new ClientReadingWorker(in, out, server);
@@ -60,6 +61,7 @@ public class SocketAcceptWorker extends SwingWorker<Void, ClientReadingWorker> {
 		for (ClientReadingWorker reader : chunks)
 		{
 			Client client = new Client(reader);
+			reader.client = client;
 			server.registerClient(client);
 		}
 	}
