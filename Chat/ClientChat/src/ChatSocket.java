@@ -12,7 +12,7 @@ import java.util.Date;
 import Common.*;
 
 
-public class ChatSocket implements Runnable{
+public class ChatSocket{
   
   //"192.168.178.22"
   private String name;
@@ -42,7 +42,7 @@ public class ChatSocket implements Runnable{
       }
     });
     
-    
+    sendName(name);
     //Let's go a different route here.
     //run();  
     ServerReadingWorker reader = new ServerReadingWorker(in, this);
@@ -63,7 +63,7 @@ public class ChatSocket implements Runnable{
       //if(gui.username.equals(""))
     	//  gui.username = "unknown";
       name = Login.getUserName();
-      //sendText(gui.username);
+      
       return true;
      
     } catch (IOException e) {
@@ -73,23 +73,26 @@ public class ChatSocket implements Runnable{
     }
   }
   
-  @Override
-  public void run() {
+  private void sendName(String name) {
+	MessageLoginPacket packet = new MessageLoginPacket();
+	packet.name = name;
+	
+	System.out.println(name);
+	byte[] data = packet.generateDataPacket();
+	byte[] pre = packet.generatePrePacket();
 	  
-    while(connected){
-      //String f = receive();	
-      
-      connected = socket.isConnected();
-      try {
-        Thread.sleep(100);
-      } catch (InterruptedException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-    }
-  }
-  
-  public void sendText(String msg){
+     try {
+   	  socket.getOutputStream().write(pre);
+   	  socket.getOutputStream().write(data);
+     }
+     catch(Exception e){
+    	 System.out.println("fischsalat");
+   	  System.out.println("Error sxhending message: " + e.toString());
+     }
+     System.out.println("sent: " + name);
+}
+
+public void sendText(String msg){
 	  
       //for text  
 	  MessageSendPacket packet = new MessageSendPacket();
@@ -109,6 +112,7 @@ public class ChatSocket implements Runnable{
   
   public void processMessage(ChatPacket packet)
   {
+	  
 	  System.out.println("Received packet of class: " + packet.getClass().toString());
 	  if (packet instanceof MessageReceivePacket)
 	  {
@@ -119,6 +123,16 @@ public class ChatSocket implements Runnable{
 		  String text = p.text;
 		  
 		  gui.addEntry(date, sender, text);
+	  }
+	  else if(packet instanceof MessageLoginPacket){
+		  
+		  MessageLoginPacket p = (MessageLoginPacket) packet;
+		  
+		  String date = new SimpleDateFormat("HH:mm").format(new Date());
+		  String name = p.name;
+
+		  gui.addEntry(date, "Server", name + " joined");
+		  
 	  }
   }
 }

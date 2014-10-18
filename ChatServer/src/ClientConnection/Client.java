@@ -1,7 +1,6 @@
 package ClientConnection;
 
 import Common.ChatPacket;
-import Common.MessageSendPacket;
 
 
 public class Client {
@@ -11,6 +10,16 @@ public class Client {
 	public String name;
 	
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+
 	public Client(ClientReadingWorker reader){
 		this.reader = reader;
 	}

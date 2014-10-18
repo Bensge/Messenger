@@ -102,6 +102,11 @@ public class ChatPacket {
 			packet = p;
 		}
 		
+		else if(packetType == MessageLoginPacket.packetID){
+			MessageLoginPacket p = new MessageLoginPacket();
+			p.name = new String(bulkPacket);
+			packet = p;
+		}
 		
 		return packet;
 	}
