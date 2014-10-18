@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import ClientConnection.Client;
 import ClientConnection.ClientReadingWorker;
 import ClientConnection.ClientWritingWorker;
+
 import Common.ChatPacket;
 import Common.MessageReceivePacket;
 import Common.MessageSendPacket;
@@ -37,7 +38,7 @@ public class ChatServer {
   }
   
   /*NOT SO CONSTANT CONSTANTS*/
-  private int port = 80;
+  private int port = MessengerCommon.SCHOOL_PORT;
   
   /*IVARS*/
   private ServerSocket socket;
@@ -50,9 +51,9 @@ public class ChatServer {
   public ChatServer() throws Exception
   {
     //Hello
-	if (System.getProperty("os.name").startsWith("Mac"))
+	if (System.getProperty("os.name").startsWith("Mac") || System.getProperty("os.name").startsWith("Windows 8"))
 	{
-		port = 1044;
+		port = MessengerCommon.DEFAULT_PORT;
 	}
     System.out.println("ChatServer by Justus & Benno");
     System.out.println("+----------------------------+");
