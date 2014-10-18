@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import Common.*;
 
 
 public class ChatSocket implements Runnable{
@@ -83,7 +84,6 @@ public class ChatSocket implements Runnable{
     byte[] toSend = msg.getBytes();
     byte[] pre = MessengerCommon.createPrePacket(MessengerCommon.MESSAGE_PACKET_ID, toSend.length);
     
-    byte[] res = MessengerCommon.mergeBuffers(pre, toSend);
     
     try {
       socket.getOutputStream().write(pre);
@@ -98,7 +98,7 @@ public class ChatSocket implements Runnable{
   public String receive(){
     
     try {
-        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+        //PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedInputStream(socket.getInputStream() );
         
         byte[] prePacket = new byte[MessengerCommon.INT_FIELD_SIZE * 2];

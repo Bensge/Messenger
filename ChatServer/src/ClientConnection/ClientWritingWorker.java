@@ -1,5 +1,5 @@
 package ClientConnection;
-import Server.MessengerCommon;
+import Common.MessengerCommon;
 
 
 import java.io.OutputStream;
