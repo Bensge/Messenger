@@ -11,7 +11,7 @@ import javax.swing.SwingWorker;
 import Server.ChatServer;
 
 
-public class ClientReadingWorker extends SwingWorker<Void, String> {
+public class ClientReadingWorker extends SwingWorker<Void, ChatPacket> {
 
 	private InputStream in;
 	public OutputStream out;
@@ -62,20 +62,20 @@ public class ClientReadingWorker extends SwingWorker<Void, String> {
 	        byte[] packetBuffer = new byte[packetSize];
 	        in.read(packetBuffer,0,packetSize);
 	        
-	        String message = new String(packetBuffer);
+	        ChatPacket packet = ChatPacket.parseDataPacket(prePacket, packetBuffer);
 	        
-	        publish(message);
+	        publish(packet);
 	    }
 	    
 	    return null;
 	}
 	
 	@Override
-	protected void process(List<String> chunks) {
+	protected void process(List<ChatPacket> chunks) {
 		// TODO Auto-generated method stub
-		for (String msg : chunks)
+		for (ChatPacket p : chunks)
 		{
-			server.processMessage(this, msg);
+			server.processMessage(this.client, p);
 		}
 	}
 	

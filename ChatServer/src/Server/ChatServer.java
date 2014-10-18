@@ -6,6 +6,10 @@ import java.awt.EventQueue;
 import ClientConnection.Client;
 import ClientConnection.ClientReadingWorker;
 import ClientConnection.ClientWritingWorker;
+import Common.ChatPacket;
+import Common.MessageReceivePacket;
+import Common.MessageSendPacket;
+import Common.MessengerCommon;
 
 public class ChatServer {
   
@@ -101,24 +105,50 @@ public class ChatServer {
   public void registerClient(Client client)
   {
 	  clients.add(client);
-	  //clients.get(clients.size()).setCWriter(clientWritingWorker);
+	  
+	  //Notify other clients
+	  MessageReceivePacket packet = new MessageReceivePacket();
+	  packet.sender = "Server";
+	  packet.text = "User joined!";
+	  packet.timestamp = MessengerCommon.currentUnixTime();
+	  sendPacketToClientsBut(client, packet);
   }
   
   public void unregisterClient(Client client)
   {
 	  clients.remove(client);
+	  
+	  //Notify other clients
+	  MessageReceivePacket packet = new MessageReceivePacket();
+	  packet.sender = "Server";
+	  packet.text = "User left!";
+	  packet.timestamp = MessengerCommon.currentUnixTime();
+	  sendPacketToClientsBut(client, packet);
   }
   
-  public void processMessage(ClientReadingWorker sender, String message)
+  public void processMessage(Client sender, ChatPacket packet)
   {
 	  System.out.println("Processing message...");
+	  
+	  ChatPacket newPacket = null;
+	  if (packet instanceof MessageSendPacket)
+	  {
+		  MessageReceivePacket p = new MessageReceivePacket();
+		  p.text = ((MessageSendPacket) packet).text;
+		  p.timestamp = MessengerCommon.currentUnixTime();
+		  p.sender = "Howouldiknow";
+		  newPacket = p;
+	  }
+	  sendPacketToClientsBut(sender,newPacket);
+  }
+  
+  public void sendPacketToClientsBut(Client sender, ChatPacket newPacket)
+  {
 	  for (Client client : clients)
 	  {
-		  if (client.getReader() != sender)
+		  if (client != sender)
 		  {
-			 client.setWriter(new ClientWritingWorker(client.getReader().out, message));
-			 client.getWriter().execute();
-			 System.out.println("Sending message soon...");
+			 client.send(newPacket);
 		  }
 	  }
   }

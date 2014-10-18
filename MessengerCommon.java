@@ -14,6 +14,7 @@ public class MessengerCommon
 	  public static final int FLOAT_FIELD_SIZE    = 4;
 	  
 	  public static final int prePacketSize = 2 * INT_FIELD_SIZE;
+	  
 	  public static final int MESSAGE_PACKET_ID = 7;
 	  
 	  /*HELPER*/
@@ -35,6 +36,14 @@ public class MessengerCommon
 		  buffer[offset + 1] = (byte) (i >> 8);
 		  buffer[offset + 2] = (byte) (i >> 16);
 		  buffer[offset + 3] = (byte) (i >> 24);
+	  }
+	  
+	  public static void writeBytesToBuffer(byte[] bytes, byte[] buffer, int offset)
+	  {
+		  for (int i = 0; i < bytes.length; i++)
+		  {
+			  buffer[offset + i] = bytes[i];
+		  }
 	  }
 	  
 	  public static byte[] createPrePacket(int type, int sendLength)
@@ -62,6 +71,12 @@ public class MessengerCommon
 		  
 		  return buf;
 	  }
+	  
+	  public static int currentUnixTime()
+	  {
+		  return (int)(System.currentTimeMillis() / 1000L);
+	  }
+	  
 }
 
 

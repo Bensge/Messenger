@@ -8,7 +8,7 @@ import javax.sql.CommonDataSource;
 
 import Common.*;
 
-public class ServerReadingWorker extends SwingWorker<Void, String> {
+public class ServerReadingWorker extends SwingWorker<Void, ChatPacket> {
 
 	private BufferedInputStream in;
 	private ChatSocket server;
@@ -39,18 +39,17 @@ public class ServerReadingWorker extends SwingWorker<Void, String> {
 	        byte[] packetBuffer = new byte[packetSize];
 	        in.read(packetBuffer,0,packetSize);
 	        
-	        String message = new String(packetBuffer);
-	        
-	        publish(message);
+	        ChatPacket packet = ChatPacket.parseDataPacket(prePacket, packetBuffer);
+	        publish(packet);
 	    }
 	}
 	
 	@Override
-	protected void process(List<String> chunks) {
+	protected void process(List<ChatPacket> chunks) {
 		// TODO Auto-generated method stub
-		for (String msg : chunks)
+		for (ChatPacket p : chunks)
 		{
-			server.processMessage(msg);
+			server.processMessage(p);
 		}
 	}
 

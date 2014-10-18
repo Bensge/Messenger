@@ -16,6 +16,21 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>src/Common/ChatPacket.java</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/ChatPacket.java</locationURI>
+		</link>
+		<link>
+			<name>src/Common/MessageReceivePacket.java</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/MessageReceivePacket.java</locationURI>
+		</link>
+		<link>
+			<name>src/Common/MessageSendPacket.java</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/MessageSendPacket.java</locationURI>
+		</link>
+		<link>
 			<name>src/Common/MessengerCommon.java</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/MessengerCommon.java</locationURI>

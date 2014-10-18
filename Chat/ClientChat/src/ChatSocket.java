@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import Common.*;
 
 
@@ -80,66 +81,49 @@ public class ChatSocket implements Runnable{
   }
   
   public void sendText(String msg){
-    //for text
-    byte[] toSend = msg.getBytes();
-    byte[] pre = MessengerCommon.createPrePacket(MessengerCommon.MESSAGE_PACKET_ID, toSend.length);
-    
-    
-    try {
-      socket.getOutputStream().write(pre);
-      socket.getOutputStream().write(toSend);
-    }
-    catch(Exception e){
-    	System.out.println("Error sending message: " + e.toString());
-    }
-    System.out.println("sent: " + msg);
-  }
-  
-  public String receive(){
-    
-    try {
-        //PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-        in = new BufferedInputStream(socket.getInputStream() );
-        
-        byte[] prePacket = new byte[MessengerCommon.INT_FIELD_SIZE * 2];
-        
-        System.out.println("Listening to client messages!");
-        
-        System.out.println("Now ready!");
-        while (true)
-        {
-          in.read(prePacket,0,8);
-          System.out.println("Received Pre-Packet!" + prePacket);
-          
-          int packetType = MessengerCommon.intFromBuffer(prePacket, 0);
-          System.out.println("Packet type: " + packetType);
-          
-          int packetSize = MessengerCommon.intFromBuffer(prePacket, 4);
-          System.out.println("Packet size: " + packetSize);
-     
-          byte[] messageBuffer = new byte[packetSize];
-          in.read(messageBuffer,0,packetSize);
-          
-          String message = new String(messageBuffer);
-          System.out.println("Message: " + message);
-          return message;
-          
-        } //end of for loop
-      } catch(Exception e){
-        System.out.println("Error while reading client socket " + e.toString());
-       
-        try {
-          in.close();
-        } catch (IOException e1) {
-          e1.printStackTrace();
-        }
-        return null;
+	  
+      //for text  
+	  MessageSendPacket packet = new MessageSendPacket();
+	  packet.text = msg;
+	  byte[] data = packet.generateDataPacket();
+	  byte[] pre = packet.generatePrePacket();
+	  
+      try {
+    	  socket.getOutputStream().write(pre);
+    	  socket.getOutputStream().write(data);
       }
+      catch(Exception e){
+    	  System.out.println("Error sending message: " + e.toString());
+      }
+      System.out.println("sent: " + msg);
   }
-  
-  public void processMessage(String msg)
+    
+  public void processMessage(ChatPacket packet)
   {
-	  String date = new SimpleDateFormat("HH:mm").format(new Date());
-	  gui.addEntry(date, "Not you", msg);
+	  System.out.println("Received packet of class: " + packet.getClass().toString());
+	  if (packet instanceof MessageReceivePacket)
+	  {
+		  MessageReceivePacket p = (MessageReceivePacket) packet;
+		  
+		  String date = new SimpleDateFormat("HH:mm").format(new Date((long)p.timestamp * 1000));
+		  String sender = p.sender;
+		  String text = p.text;
+		  
+		  gui.addEntry(date, sender, text);
+	  }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
