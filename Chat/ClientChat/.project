@@ -16,7 +16,7 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>src/MessengerCommon.java</name>
+			<name>src/Common/MessengerCommon.java</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/MessengerCommon.java</locationURI>
 		</link>

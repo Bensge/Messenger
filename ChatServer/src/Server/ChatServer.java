@@ -83,7 +83,7 @@ public class ChatServer {
   private void tearDown()
   {
     //Close socket
-    try { 
+    try {
       socket.close();
     } catch(Exception e) {
       
@@ -116,11 +116,9 @@ public class ChatServer {
 	  {
 		  if (client.getReader() != sender)
 		  {
-			 // ClientWritingWorker writer = new ClientWritingWorker(client.out, message);
 			 client.setWriter(new ClientWritingWorker(client.getReader().out, message));
-			 // writer.execute();
-			  client.getWriter().execute();
-			  System.out.println("Sending message soon...");
+			 client.getWriter().execute();
+			 System.out.println("Sending message soon...");
 		  }
 	  }
   }

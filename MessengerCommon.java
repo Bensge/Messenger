@@ -1,3 +1,5 @@
+package Common;
+
 public class MessengerCommon
 {
 	  public static final int OBJECT_SHELL_SIZE   = 8;
@@ -12,7 +14,6 @@ public class MessengerCommon
 	  public static final int FLOAT_FIELD_SIZE    = 4;
 	  
 	  public static final int prePacketSize = 2 * INT_FIELD_SIZE;
-	  
 	  public static final int MESSAGE_PACKET_ID = 7;
 	  
 	  /*HELPER*/
