@@ -14,18 +14,21 @@ import Common.*;
 public class ChatSocket implements Runnable{
   
   //"192.168.178.22"
+  private String name;
   private GUI gui;
   private Socket socket;
   private BufferedInputStream in;
   private SocketAddress address;
+  private Login login;
   private boolean connected = false;
   
-  public ChatSocket(String addr, int port){
-    
+  public ChatSocket(String addr, int port, Login login){
+    this.login = login;
     address = new InetSocketAddress(addr, port);
     socket = new Socket();
     
-    start(); 
+    if(!connect())
+    	return; 
     
     System.out.println("Connected to:" + socket.getInetAddress() + " on port " + socket.getPort());
     
@@ -45,21 +48,27 @@ public class ChatSocket implements Runnable{
     reader.execute();
   }
   
-  public void start(){
+  public boolean connect(){
+	//returns true if connection was succesfull
     try {
       socket.connect(address);
       connected = socket.isConnected();
+      
+      if(connected)
+    	  login.dispose();
      
       in = new BufferedInputStream(socket.getInputStream() );
       
       //if(gui.username.equals(""))
     	//  gui.username = "unknown";
-      
+      name = Login.getUserName();
       //sendText(gui.username);
+      return true;
      
     } catch (IOException e) {
-      
-      e.printStackTrace();
+      login.complain();
+      return false;
+      //e.printStackTrace();
     }
   }
   

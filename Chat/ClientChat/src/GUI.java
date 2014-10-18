@@ -39,17 +39,10 @@ private JTextField textField;
   private DefaultTableModel model;
   private JTable messageTable;
   public String username;
-  /**
-   * @wbp.nonvisual location=-290,194
-   */
-
-  /**
-   * Launch the application.
-   */
 
   public GUI() {
 	  
-	username = Start.USERNAME;
+	username = Login.getUserName();
 	  
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setBounds(100, 100, 800, 600);
@@ -93,6 +86,8 @@ private JTextField textField;
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
+			if(textField.getText().equals(""))
+				return;
 			
 			String date = new SimpleDateFormat("HH:mm").format(new Date());
 			
@@ -130,9 +125,6 @@ private JTextField textField;
     btnSend.addActionListener(listener);
   }
 
-public void write(String text) {
-	System.out.println("received: " + text);
-}
 
 public void addEntry(String date, String name, String text){
 	model = (DefaultTableModel) messageTable.getModel();
