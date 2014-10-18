@@ -60,7 +60,28 @@ public class ClientReadingWorker extends SwingWorker<Void, ChatPacket> {
 	        System.out.println("Packet size: " + packetSize);
 	        
 	        byte[] packetBuffer = new byte[packetSize];
-	        in.read(packetBuffer,0,packetSize);
+	        
+	        
+	        result = 0;
+	        int receivedCount = 0;
+	        while (receivedCount < packetSize)
+	        {
+		        result = in.read(packetBuffer,receivedCount,packetSize);
+		        if (result < 0)
+		        {
+		        	System.out.println("Error reading big packet!!!" + result);
+		        	break;
+		        }
+		        else
+		        {
+		        	receivedCount += result;
+		        	if (receivedCount < packetSize)
+			        {
+			        	System.out.println("Didn't read enough: " + (receivedCount / packetSize * 100) + "%");
+			        }
+		        }
+	        }
+	        System.out.println("Reading done!");
 	        
 	        ChatPacket packet = ChatPacket.parseDataPacket(prePacket, packetBuffer);
 	        

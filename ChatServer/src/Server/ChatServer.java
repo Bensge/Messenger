@@ -6,8 +6,8 @@ import java.awt.EventQueue;
 import ClientConnection.Client;
 import ClientConnection.ClientReadingWorker;
 import ClientConnection.ClientWritingWorker;
-
 import Common.ChatPacket;
+import Common.MessageImagePacket;
 import Common.MessageReceivePacket;
 import Common.MessageSendPacket;
 import Common.MessengerCommon;
@@ -139,6 +139,10 @@ public class ChatServer {
 		  p.timestamp = MessengerCommon.currentUnixTime();
 		  p.sender = "Howouldiknow";
 		  newPacket = p;
+	  }
+	  else if (packet instanceof MessageImagePacket)
+	  {
+		  newPacket = packet;
 	  }
 	  sendPacketToClientsBut(sender,newPacket);
   }

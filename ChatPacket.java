@@ -1,5 +1,13 @@
 package Common;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.imageio.ImageIO;
+
+
 public class ChatPacket {
 	public static int packetID = 0;
 	
@@ -99,6 +107,19 @@ public class ChatPacket {
 			int textLength = packetSize - textOffset;
 			p.text = new String(bulkPacket, textOffset, textLength);
 			
+			packet = p;
+		}
+		else if (packetType == MessageImagePacket.packetID)
+		{
+			MessageImagePacket p = new MessageImagePacket();
+			byte[] imageData = bulkPacket;
+			InputStream in = new ByteArrayInputStream(imageData);
+			try {
+				p.image = ImageIO.read(in);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			packet = p;
 		}
 		

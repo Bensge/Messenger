@@ -1,5 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,6 +9,8 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import javax.swing.ImageIcon;
 
 import Common.*;
 
@@ -36,11 +39,37 @@ public class ChatSocket implements Runnable{
     gui = new GUI();
     
     gui.setSendButtonListener(new ActionListener() {
-      public void actionPerformed(ActionEvent arg0)
-      {
-        sendText(gui.getText());
-      }
+    	@Override
+    	public void actionPerformed(ActionEvent arg0)
+    	{
+    		sendText(gui.getText());
+    	}
     });
+    
+    gui.setDataListener(new DataSendListener() {
+		@Override
+		public void sendObject(Object o) {
+			if (o instanceof BufferedImage)
+			{
+				MessageImagePacket p = new MessageImagePacket();
+				p.image = (BufferedImage)o;
+				byte[] data = p.generateDataPacket();
+			 	byte[] pre = p.generatePrePacket();
+			  
+			 	try {
+			 		socket.getOutputStream().write(pre);
+			 		socket.getOutputStream().write(data);
+			 		socket.getOutputStream().flush();
+			 	}
+			 	catch(Exception e){
+			 		System.out.println("Error sending image: " + e.toString());
+			 	}
+			 	System.out.println("sent image");
+			}
+		}
+	});
+    
+    
     
     
     //Let's go a different route here.
@@ -50,7 +79,7 @@ public class ChatSocket implements Runnable{
   }
   
   public boolean connect(){
-	//returns true if connection was succesfull
+	//returns true if connection was successful
     try {
       socket.connect(address);
       connected = socket.isConnected();
@@ -119,6 +148,11 @@ public class ChatSocket implements Runnable{
 		  String text = p.text;
 		  
 		  gui.addEntry(date, sender, text);
+	  }
+	  else if (packet instanceof MessageImagePacket)
+	  {
+		  String date = "Not now";
+		  gui.addEntry(date, "DUNNO", new ImageIcon(((MessageImagePacket)packet).image));
 	  }
   }
 }

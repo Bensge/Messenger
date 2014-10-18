@@ -21,6 +21,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/ChatPacket.java</locationURI>
 		</link>
 		<link>
+			<name>src/Common/MessageImagePacket.java</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/MessageImagePacket.java</locationURI>
+		</link>
+		<link>
 			<name>src/Common/MessageReceivePacket.java</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/MessageReceivePacket.java</locationURI>

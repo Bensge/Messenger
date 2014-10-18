@@ -15,8 +15,6 @@ public class Client {
 		this.reader = reader;
 	}
 	
-
-	
 	public ClientReadingWorker getReader() {
 		return reader;
 	}
