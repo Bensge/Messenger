@@ -22,6 +22,7 @@ import java.awt.Component;
 
 import javax.swing.Box;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.GroupLayout;
 import javax.swing.JOptionPane;
@@ -71,20 +72,11 @@ private JTextField textField;
     Object[] columns = { "Time", "User", "Message" };
     Object[][] rowData = { { "9:99", username, "Hi, der Chat geht jetzt. "} };
     
-    messageTable = new JTable(new DefaultTableModel(rowData, columns));
     
-    DefaultTableCellRenderer r = new DefaultTableCellRenderer() {
-    	public void setValue(Object value) {
-	    	if (value instanceof Icon) {
-	    		setIcon((Icon) value);
-	    		setText("");
-	    	} else {
-	    		setIcon(null);
-	    		super.setValue(value);
-	    	}
-    	}
-    };
-    messageTable.setDefaultRenderer(Object.class, r);
+    messageTable = new JTable(null);
+    TableModel model = new TableModel(rowData, columns, messageTable);
+    messageTable.setModel(model);
+    
     
     messageTable.getColumnModel().getColumn(0).setMinWidth(10);
     messageTable.getColumnModel().getColumn(0).setMaxWidth(70);
@@ -132,12 +124,13 @@ private JTextField textField;
 				{
 					String fileName = f.getName().toLowerCase();
 					if (fileName.endsWith(".png") || fileName.endsWith(".jpg") || fileName.endsWith(".jpeg"))
-					{	
+					{
 						int reply = JOptionPane.showConfirmDialog(textField, "Do you want to send the dropped file?", "File Transfer", JOptionPane.YES_NO_OPTION);
 						if (reply == JOptionPane.YES_OPTION)
 						{
 							BufferedImage image = ImageIO.read(f);
 							dataListener.sendObject(image);
+							addEntry("Not now", "DUNNO", image);
 						}
 						
 						dtde.dropComplete(true);
@@ -239,9 +232,9 @@ private JTextField textField;
 	  model.addRow(new Object[]{date, name, text});
   }
   
-  public void addEntry(String date, String name, Object o){
+  public void addEntry(String date, String name, BufferedImage image){
 	  model = (DefaultTableModel) messageTable.getModel();
-	  model.addRow(new Object[]{date, name, o});
+	  model.addRow(new Object[]{date, name, image});
   }
 
 }

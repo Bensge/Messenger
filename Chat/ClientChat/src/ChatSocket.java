@@ -155,7 +155,7 @@ public void sendText(String msg){
 	  else if (packet instanceof MessageImagePacket)
 	  {
 		  String date = "Not now";
-		  gui.addEntry(date, "DUNNO", new ImageIcon(((MessageImagePacket)packet).image));
+		  gui.addEntry(date, "DUNNO", ((MessageImagePacket)packet).image);
 	  }
 	  else if(packet instanceof MessageLoginPacket)
 	  {
