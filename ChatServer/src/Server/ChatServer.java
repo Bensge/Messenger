@@ -7,6 +7,7 @@ import ClientConnection.Client;
 import ClientConnection.ClientReadingWorker;
 import ClientConnection.ClientWritingWorker;
 import Common.ChatPacket;
+import Common.MessageFilePacket;
 import Common.MessageImagePacket;
 import Common.MessageLoginPacket;
 import Common.MessageReceivePacket;
@@ -145,17 +146,18 @@ public class ChatServer {
 		  //get name of packet
 		  sender.setName(((MessageLoginPacket) packet).name);
 		  
-		  
 		  //Notify other clients
 		  MessageReceivePacket p = new MessageReceivePacket();
 		  p.sender = "Server";
 		  p.text = "User " + sender.getName() + " joined!";
 		  p.timestamp = MessengerCommon.currentUnixTime();
-		 // sendPacketToClientsBut(client, packet);
 		  newPacket = p;
 	  }
 	  else if (packet instanceof MessageImagePacket)
 	  {
+		  newPacket = packet;
+	  }
+	  else if(packet instanceof MessageFilePacket){
 		  newPacket = packet;
 	  }
 	  sendPacketToClientsBut(sender,newPacket);

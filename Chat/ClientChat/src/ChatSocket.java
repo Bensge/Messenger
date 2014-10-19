@@ -2,6 +2,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
@@ -65,6 +66,23 @@ public class ChatSocket{
 			 		System.out.println("Error sending image: " + e.toString());
 			 	}
 			 	System.out.println("sent image");
+			}
+			else{
+				MessageFilePacket p = new MessageFilePacket();
+				p.file = (File) o;
+				
+				byte[] data = p.generateDataPacket();
+			 	byte[] pre = p.generatePrePacket();
+			  
+			 	try {
+			 		socket.getOutputStream().write(pre);
+			 		socket.getOutputStream().write(data);
+			 		socket.getOutputStream().flush();
+			 	}
+			 	catch(Exception e){
+			 		System.out.println("Error sending file: " + e.toString());
+			 	}
+			 	System.out.println("sent file");
 			}
 		}
 	});

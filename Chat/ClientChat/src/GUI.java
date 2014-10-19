@@ -131,24 +131,38 @@ private JTextField textField;
 				for (File f : fileList)
 				{
 					String fileName = f.getName().toLowerCase();
-					if (fileName.endsWith(".png") || fileName.endsWith(".jpg") || fileName.endsWith(".jpeg"))
-					{	
+					
+						
 						int reply = JOptionPane.showConfirmDialog(textField, "Do you want to send the dropped file?", "File Transfer", JOptionPane.YES_NO_OPTION);
 						if (reply == JOptionPane.YES_OPTION)
 						{
-							BufferedImage image = ImageIO.read(f);
-							dataListener.sendObject(image);
+							//for images
+							if (fileName.endsWith(".png") || fileName.endsWith(".jpg") || fileName.endsWith(".jpeg"))
+							{
+								BufferedImage image = ImageIO.read(f);
+								dataListener.sendObject(image);
+							}
+							//if not an image
+							else{
+								System.out.println(f.getAbsolutePath());
+								System.out.println(f.getPath());
+								dataListener.sendObject(f);
+								
+							}
 						}
 						
 						dtde.dropComplete(true);
 						return;
-					}
+					
+					
+					
 				}
 				dtde.rejectDrop();
 				dtde.dropComplete(false);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				System.out.println("scheiﬂe");
 				dtde.dropComplete(false);
 			}
 		}
