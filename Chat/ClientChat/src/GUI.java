@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FocusTraversalPolicy;
+import java.awt.Font;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -57,6 +58,7 @@ public class GUI extends JFrame {
 private static final long serialVersionUID = 1L;
 private JTextField textField;
   private JButton btnSend;
+  private JButton emojiButton;
   private TableModel model;
   private JTable messageTable;
   public String username;
@@ -110,6 +112,8 @@ private JTextField textField;
     //50 is actually too small, but the group and with it the text field always has at least the button's height.
     textField.setMaximumSize(new Dimension(9999, 50));
     textField.setBackground(new Color(190, 190, 190));
+    textField.setText("\uE415" + "\uE056" + "\uE057" + "\u263a" + "abcd" + "\uF8FF");
+    //textField.setFont(new Font("Apple Color Emoji", Font.PLAIN, 10));
     DropTarget dt = new DropTarget(textField, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetListener() {
 		
 		@Override
@@ -196,6 +200,16 @@ private JTextField textField;
 		
 	});
     bottomBox.add(textField);
+    //Simley button with unicode smiley. Let's hope all the default system font have this emoji.
+    emojiButton = new JButton("\u263a");
+    emojiButton.setPreferredSize(new Dimension(40, 20));
+    emojiButton.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("Emoji's, sir!");
+		}
+	});
+    bottomBox.add(emojiButton);
     
     btnSend = new JButton("Send");
     //For send on enter button press.
@@ -203,7 +217,6 @@ private JTextField textField;
     btnSend.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
 			if(textField.getText().equals(""))
 				return;
 			
