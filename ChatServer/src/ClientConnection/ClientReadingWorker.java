@@ -25,8 +25,8 @@ public class ClientReadingWorker extends SwingWorker<Void, ChatPacket> {
 	}
 	
 	@Override
-	protected Void doInBackground() throws Exception {
-		// TODO Auto-generated method stub
+	protected Void doInBackground() throws Exception
+	{
 		byte[] prePacket = new byte[MessengerCommon.INT_FIELD_SIZE * 2];
 		
 	    System.out.println("Listening to client messages!");
@@ -61,12 +61,11 @@ public class ClientReadingWorker extends SwingWorker<Void, ChatPacket> {
 	        
 	        byte[] packetBuffer = new byte[packetSize];
 	        
-	        
 	        result = 0;
 	        int receivedCount = 0;
 	        while (receivedCount < packetSize)
 	        {
-		        result = in.read(packetBuffer,receivedCount,packetSize);
+		        result = in.read(packetBuffer,receivedCount,packetSize - receivedCount);
 		        if (result < 0)
 		        {
 		        	System.out.println("Error reading big packet!!!" + result);
@@ -77,12 +76,10 @@ public class ClientReadingWorker extends SwingWorker<Void, ChatPacket> {
 		        	receivedCount += result;
 		        	if (receivedCount < packetSize)
 			        {
-			        	System.out.println("Didn't read enough: " + (receivedCount / packetSize * 100) + "%");
+			        	System.out.println("Reading progress: " + ((float)receivedCount / (float)packetSize * 100.f) + "%");
 			        }
 		        }
 	        }
-	        System.out.println("Reading done!");
-	        
 	        ChatPacket packet = ChatPacket.parseDataPacket(prePacket, packetBuffer);
 	        
 	        publish(packet);
