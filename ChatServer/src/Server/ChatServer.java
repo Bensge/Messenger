@@ -146,6 +146,10 @@ public class ChatServer {
 		  //get name of packet
 		  sender.setName(((MessageLoginPacket) packet).name);
 		  
+		  //Send client connect confirmation
+		  MessageReceivePacket confirmationPacket = MessageReceivePacket.serverMessagePacket("You joined!");
+		  sender.send(confirmationPacket);
+		  
 		  //Notify other clients
 		  MessageReceivePacket p = new MessageReceivePacket();
 		  p.sender = "Server";

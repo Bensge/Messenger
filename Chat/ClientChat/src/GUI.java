@@ -7,6 +7,7 @@ import java.awt.FocusTraversalPolicy;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -20,12 +21,14 @@ import javax.swing.JTextField;
 
 import java.awt.Component;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.GroupLayout;
 import javax.swing.JOptionPane;
+import javax.swing.Renderer;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -54,12 +57,14 @@ public class GUI extends JFrame {
 private static final long serialVersionUID = 1L;
 private JTextField textField;
   private JButton btnSend;
-  private DefaultTableModel model;
+  private TableModel model;
   private JTable messageTable;
   public String username;
   private DataSendListener dataListener;
 
   public GUI() {
+	  
+	setTitle("Messenger");
 	  
 	username = Login.getUserName();
 	  
@@ -70,7 +75,7 @@ private JTextField textField;
     Box topBox = Box.createHorizontalBox();
     
     Object[] columns = { "Time", "User", "Message" };
-    Object[][] rowData = { { "9:99", username, "Hi, der Chat geht jetzt. "} };
+    Object[][] rowData = {};
     
     
     messageTable = new JTable(null);
@@ -80,27 +85,31 @@ private JTextField textField;
     
     messageTable.getColumnModel().getColumn(0).setMinWidth(10);
     messageTable.getColumnModel().getColumn(0).setMaxWidth(70);
-    messageTable.getColumnModel().getColumn(0).setWidth(55);
-    messageTable.getColumnModel().getColumn(0).setPreferredWidth(55);
+    messageTable.getColumnModel().getColumn(0).setWidth(45);
+    messageTable.getColumnModel().getColumn(0).setPreferredWidth(45);
     
     messageTable.getColumnModel().getColumn(1).setMinWidth(30);
     messageTable.getColumnModel().getColumn(1).setMaxWidth(100);
-    messageTable.getColumnModel().getColumn(1).setWidth(60);
-    messageTable.getColumnModel().getColumn(1).setPreferredWidth(60);
+    messageTable.getColumnModel().getColumn(1).setWidth(50);
+    messageTable.getColumnModel().getColumn(1).setPreferredWidth(50);
     
     //messageTable.setMaximumSize(new Dimension(9999, 300));
     JScrollPane messageTableScroller = new JScrollPane(messageTable);
-    messageTableScroller.setBackground(Color.WHITE);
+    messageTableScroller.setBackground(new Color(35, 34, 34));
+    messageTableScroller.getViewport().setBackground(new Color(35, 34, 34));
     messageTableScroller.setMinimumSize(new Dimension(350, 200));
     messageTableScroller.setPreferredSize(new Dimension(500, 220));
     
     topBox.add(messageTableScroller);
     
     Box bottomBox = Box.createHorizontalBox();
+    bottomBox.setOpaque(true);
+    bottomBox.setBackground(new Color(90, 90, 90));
     
     textField = new JTextField();
     //50 is actually too small, but the group and with it the text field always has at least the button's height.
     textField.setMaximumSize(new Dimension(9999, 50));
+    textField.setBackground(new Color(190, 190, 190));
     DropTarget dt = new DropTarget(textField, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetListener() {
 		
 		@Override
@@ -154,7 +163,7 @@ private JTextField textField;
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				System.out.println("scheiﬂe");
+				System.out.println("scheisse");
 				dtde.dropComplete(false);
 			}
 		}
@@ -241,12 +250,14 @@ private JTextField textField;
 
 
   public void addEntry(String date, String name, String text){
-	  model = (DefaultTableModel) messageTable.getModel();
-	  model.addRow(new Object[]{date, name, text});
+	  model = (TableModel) messageTable.getModel();
+	  
+	  Boolean highlighted = name.equals("Server");
+	  model.addRow(new Object[]{date, name, text},highlighted);
   }
   
   public void addEntry(String date, String name, BufferedImage image){
-	  model = (DefaultTableModel) messageTable.getModel();
+	  model = (TableModel) messageTable.getModel();
 	  model.addRow(new Object[]{date, name, image});
   }
 

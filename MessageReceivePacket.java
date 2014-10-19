@@ -6,6 +6,20 @@ public class MessageReceivePacket extends MessageSendPacket {
 	public String sender;
 	public int timestamp;
 	
+	public MessageReceivePacket()
+	{
+		
+	}
+	
+	public static MessageReceivePacket serverMessagePacket(String message)
+	{
+		MessageReceivePacket packet = new MessageReceivePacket();
+		packet.sender = "Server";
+		packet.timestamp = MessengerCommon.currentUnixTime();
+		packet.text = message;
+		return packet;
+	}
+	
 	public byte[] generateDataPacket()
 	{
 		byte[] senderBytes = sender.getBytes();
