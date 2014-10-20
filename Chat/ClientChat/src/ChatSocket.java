@@ -70,10 +70,11 @@ public class ChatSocket{
 			else{
 				MessageFilePacket p = new MessageFilePacket();
 				p.file = (File) o;
-				
+				System.out.println("loglog");
 				byte[] data = p.generateDataPacket();
+				System.out.println((data==null) + "data == null");
 			 	byte[] pre = p.generatePrePacket();
-			  
+			 	System.out.println((pre == null) + "pre == null");
 			 	try {
 			 		socket.getOutputStream().write(pre);
 			 		socket.getOutputStream().write(data);
@@ -132,7 +133,6 @@ public class ChatSocket{
    	  socket.getOutputStream().write(data);
      }
      catch(Exception e){
-    	 System.out.println("fischsalat");
    	  System.out.println("Error sxhending message: " + e.toString());
      }
      System.out.println("sent: " + name);
@@ -173,7 +173,13 @@ public void sendText(String msg){
 	  else if (packet instanceof MessageImagePacket)
 	  {
 		  String date = "Not now";
+		  date = new SimpleDateFormat("HH:mm").format(new Date());
+		  
 		  gui.addEntry(date, "DUNNO", ((MessageImagePacket)packet).image);
+	  }
+	  else if (packet instanceof MessageFilePacket){
+		  String date = new SimpleDateFormat("HH:mm").format(new Date());
+		  gui.addEntry(date, "Mysterio", "You just got filed");
 	  }
 	  else if(packet instanceof MessageLoginPacket)
 	  {

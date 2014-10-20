@@ -2,6 +2,9 @@ package Common;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -121,6 +124,23 @@ public class ChatPacket {
 				e.printStackTrace();
 			}
 			packet = p;
+		}
+		else if(packetType == MessageFilePacket.packetID){
+			MessageFilePacket p = new MessageFilePacket();
+			byte[] data = bulkPacket;
+			try {
+				File f = new File("test.txt");
+				FileOutputStream fos = new FileOutputStream(f);
+				fos.write(data);
+				p.file = f;
+				
+				packet = p;
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 		}
 		
 		else if(packetType == MessageLoginPacket.packetID){

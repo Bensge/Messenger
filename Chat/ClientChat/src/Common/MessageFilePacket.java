@@ -1,10 +1,9 @@
 package Common;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class MessageFilePacket extends ChatPacket{
 	public static int packetID = 4;
@@ -15,23 +14,20 @@ public class MessageFilePacket extends ChatPacket{
 	
 	@Override
 	public byte[] generateDataPacket() {
-		try {
-			System.out.println("its: " + (file==null));
-			res = new byte[(int) file.length()];
-			FileInputStream fis = new FileInputStream(file);
-			System.out.println("available" + fis.available());
-			//dunno whats wrong fuck it
-			fis.read(res);
-			System.out.println(res==null);
-		
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			System.out.println("falsch");
+		 try {
+			System.out.println(file.getPath());
+			Path path = Paths.get(file.getPath());
+			res = java.nio.file.Files.readAllBytes(path);
+			this.length = res.length;
+			return res;
+			
+		 }catch (IOException e) {
+			System.out.println("damnit");
 			e.printStackTrace();
 		}
-		System.out.println(new String(res));
-		return res;
+		return null;
+		 
+		 
 	}
 
 }

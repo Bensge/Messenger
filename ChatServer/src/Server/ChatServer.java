@@ -109,12 +109,6 @@ public class ChatServer {
   {
 	  clients.add(client);
 	  
-	 /* //Notify other clients
-	  MessageReceivePacket packet = new MessageReceivePacket();
-	  packet.sender = "Server";
-	  packet.text = "User joined!";
-	  packet.timestamp = MessengerCommon.currentUnixTime();
-	  sendPacketToClientsBut(client, packet);*/
   }
   
   public void unregisterClient(Client client)

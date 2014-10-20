@@ -149,8 +149,6 @@ private JTextField textField;
 							}
 							//if not an image
 							else{
-								System.out.println(f.getAbsolutePath());
-								System.out.println(f.getPath());
 								dataListener.sendObject(f);
 								
 							}
