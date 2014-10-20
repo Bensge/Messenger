@@ -49,26 +49,15 @@ public class ChatSocket{
     
     gui.setDataListener(new DataSendListener() {
 		@Override
-		public void sendObject(Object o) {
-			if (o instanceof BufferedImage)
-			{
-				MessageImagePacket p = new MessageImagePacket();
-				p.image = (BufferedImage)o;
-				byte[] data = p.generateDataPacket();
-			 	byte[] pre = p.generatePrePacket();
-			  
-			 	try {
-			 		socket.getOutputStream().write(pre);
-			 		socket.getOutputStream().write(data);
-			 		socket.getOutputStream().flush();
-			 	}
-			 	catch(Exception e){
-			 		System.out.println("Error sending image: " + e.toString());
-			 	}
-			 	System.out.println("sent image");
-			}
-			else{
-				MessageFilePacket p = new MessageFilePacket();
+		public void sendObject(Object o, boolean isImage) {
+			
+				MessageFilePacket p;
+		
+				if(isImage)
+					p = new MessageImagePacket();
+				else
+					p = new MessageFilePacket();
+			
 				p.file = (File) o;
 				System.out.println("loglog");
 				byte[] data = p.generateDataPacket();
@@ -84,8 +73,9 @@ public class ChatSocket{
 			 		System.out.println("Error sending file: " + e.toString());
 			 	}
 			 	System.out.println("sent file");
-			}
+			//}
 		}
+
 	});
     
     
@@ -175,7 +165,7 @@ public void sendText(String msg){
 		  String date = "Not now";
 		  date = new SimpleDateFormat("HH:mm").format(new Date());
 		  
-		  gui.addEntry(date, "DUNNO", ((MessageImagePacket)packet).image);
+		  gui.addEntry(date, "DUNNO", ((MessageImagePacket)packet).getBufferedImage());
 	  }
 	  else if (packet instanceof MessageFilePacket){
 		  String date = new SimpleDateFormat("HH:mm").format(new Date());

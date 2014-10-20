@@ -141,24 +141,18 @@ private JTextField textField;
 						int reply = JOptionPane.showConfirmDialog(textField, "Do you want to send the dropped file?", "File Transfer", JOptionPane.YES_NO_OPTION);
 						if (reply == JOptionPane.YES_OPTION)
 						{
-							//for images
-							if (fileName.endsWith(".png") || fileName.endsWith(".jpg") || fileName.endsWith(".jpeg"))
-							{
-								BufferedImage image = ImageIO.read(f);
-								dataListener.sendObject(image);
-							}
-							//if not an image
-							else{
-								dataListener.sendObject(f);
-								
-							}
+							if(fileName.endsWith(".png") || fileName.endsWith(".jpg") || fileName.endsWith(".jpeg"))
+								dataListener.sendObject(f, true);
+							else
+								dataListener.sendObject(f, false);
+						}
 					
 						
 					dtde.dropComplete(true);
 					return;
 					
 					
-				}
+				
 			}
 				dtde.rejectDrop();
 				dtde.dropComplete(false);

@@ -154,9 +154,11 @@ public class ChatServer {
 	  else if (packet instanceof MessageImagePacket)
 	  {
 		  newPacket = packet;
+		  System.out.println("right one");
 	  }
-	  else if(packet instanceof MessageFilePacket){
+	  else if(packet instanceof MessageFilePacket){//instance of wrong cause of subclass stuff
 		  newPacket = packet;
+		  System.out.println("wrong one");
 	  }
 	  sendPacketToClientsBut(sender,newPacket);
   }
