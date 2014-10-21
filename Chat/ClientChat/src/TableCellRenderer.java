@@ -22,11 +22,12 @@ public class TableCellRenderer extends DefaultTableCellRenderer implements Compo
 {
 	private static final long serialVersionUID = 1L;
 	
-	private JTable table;
+	public JTable table;
 	private Point imageDimension;
 	private BufferedImage image;
 	private Boolean useNameColor;
 	private Boolean useDateColor;
+	private boolean dark;
 	private Boolean useLightBackgroundColor;
 	private ArrayList<Boolean> highlightedRows;
 	private Boolean scrollToBottom;
@@ -37,13 +38,15 @@ public class TableCellRenderer extends DefaultTableCellRenderer implements Compo
 		this.table = table;
 		this.table.addComponentListener(this);
 		this.table.setTableHeader(null);
-		this.table.setBackground(new Color(36, 34, 34));
+		//this.table.setBackground(new Color(36, 34, 34));
 		this.table.setFillsViewportHeight(true);
 		this.table.setShowGrid(false);
 		this.table.setSelectionModel(new NullSelectionModel());
 		this.table.setIntercellSpacing(new Dimension(0, 0));
 		this.scrollToBottom = false;
 		this.highlightedRows = new ArrayList<Boolean>();
+		dark = true;
+		useLightBackgroundColor = true;
 	}
 	
 	@Override
@@ -55,6 +58,7 @@ public class TableCellRenderer extends DefaultTableCellRenderer implements Compo
 		}
 		else {
 			Color color = new Color(170, 170, 170);
+			//Color color = Color.RED;
 			if (useNameColor)
 			{
 				String text = this.getText();
@@ -77,11 +81,18 @@ public class TableCellRenderer extends DefaultTableCellRenderer implements Compo
 			
 			if (useLightBackgroundColor)
 			{
-				this.setBackground(new Color(60, 60, 60));
+				if(dark)
+					this.setBackground(new Color(50, 50, 50
+							));
+				else
+					this.setBackground(new Color(245, 245, 245));
 			}
 			else
 			{
-				this.setBackground(new Color(36, 34, 34));
+				if(dark)
+					this.setBackground(new Color(255, 255, 255));
+				else
+					this.setBackground(new Color(0, 0, 0));
 			}
 			
 			super.paintComponent(g);
@@ -104,13 +115,17 @@ public class TableCellRenderer extends DefaultTableCellRenderer implements Compo
     	}
 	}
 	
+	public void changeBackground(boolean dark){
+		this.dark = dark;
+	}
+	
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
 		useNameColor = column == 1;
 		useDateColor = column == 0;
 		
-		useLightBackgroundColor = highlightedRows.size() > row && highlightedRows.get(row); 
+		//useLightBackgroundColor = highlightedRows.size() > row && highlightedRows.get(row); 
 		
 		return super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
 				row, column);

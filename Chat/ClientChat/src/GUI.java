@@ -1,86 +1,98 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.FocusTraversalPolicy;
-import java.awt.Font;
-
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JSplitPane;
-import javax.swing.BoxLayout;
-
-import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JTextField;
-
-import java.awt.Component;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.GroupLayout;
-import javax.swing.JOptionPane;
-import javax.swing.Renderer;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-
-import Common.MessageUserActionPacket.Action;
-
+import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 
-public class GUI extends JFrame {
+import Common.MessageUserActionPacket.Action;
+
+
+public class GUI extends JFrame implements ActionListener{
 
 private static final long serialVersionUID = 1L;
-private JTextField textField;
+  private JTextField textField;
   private JButton btnSend;
   private JButton emojiButton;
-  private TableModel messagesModel;
+  public TableModel messagesModel;
   private JTable messageTable;
   private JTable userTable;
-  private TableModel userModel;
+  public TableModel userModel;
   private ArrayList<String> users;
   public String username;
+  
+  public final Color darkColor = new Color(0, 0, 0);
+  public final Color brightColor = new Color(255, 255, 255);
+  private JScrollPane messageTableScroller;
+  private JScrollPane userTableScroller;
+  private JMenuBar menuBar;
+  private JMenu look, other;
+  private JMenuItem changeGUI, setMediaFolder;
+  private Box bottomBox, verticalBox;
+  
+  private SettingsListener settingsListener;
   private DataSendListener dataListener;
 
   public GUI() {
-	  
+	settingsListener = new Settings(this);
+	
 	setTitle("Messenger");
-	  
+	
 	username = Login.getUserName();
 	  
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setBounds(100, 100, 800, 600);
     getContentPane().setLayout(new BorderLayout());
     
+    //Box topTopBox = Box.createHorizontalBox();
     Box topBox = Box.createHorizontalBox();
+    
+    menuBar = new JMenuBar();
+    look = new JMenu("Edit Design");
+    other = new JMenu("Other");
+    changeGUI = new JMenuItem("Change Design");
+    setMediaFolder = new JMenuItem("Set Media Folder");
+    
+    changeGUI.addActionListener(this);
+    setMediaFolder.addActionListener(this);
+    
+    look.add(changeGUI);
+    other.add(setMediaFolder);
+    
+    //menuBar.add(changeGui);
+    menuBar.add(look);
+    menuBar.add(other);
+    
+    menuBar.setBackground(Color.BLACK);
+   // topTopBox.add(menuBar);
+    //topTopBox.set
+    setJMenuBar(menuBar); 
+    changeGUI.setBackground(Color.BLACK);
     
     Object[] columns = { "Time", "User", "Message" };
     Object[][] rowData = {};
@@ -89,7 +101,6 @@ private JTextField textField;
     messageTable = new JTable(null);
     messagesModel = new TableModel(rowData, columns, messageTable);
     messageTable.setModel(messagesModel);
-    
     
     messageTable.getColumnModel().getColumn(0).setMinWidth(10);
     messageTable.getColumnModel().getColumn(0).setMaxWidth(70);
@@ -102,7 +113,7 @@ private JTextField textField;
     messageTable.getColumnModel().getColumn(1).setPreferredWidth(50);
     
     //messageTable.setMaximumSize(new Dimension(9999, 300));
-    JScrollPane messageTableScroller = new JScrollPane(messageTable);
+    messageTableScroller = new JScrollPane(messageTable);
     messageTableScroller.setBackground(new Color(35, 34, 34));
     messageTableScroller.getViewport().setBackground(new Color(35, 34, 34));
     messageTableScroller.setMinimumSize(new Dimension(350, 200));
@@ -119,7 +130,7 @@ private JTextField textField;
     userModel = new TableModel(rowData, userColumns, userTable);
     userTable.setModel(userModel);
     
-    JScrollPane userTableScroller = new JScrollPane(userTable);
+    userTableScroller = new JScrollPane(userTable);
     userTableScroller.setBackground(new Color(35, 34, 34));
     userTableScroller.getViewport().setBackground(new Color(35, 34, 34));
     userTableScroller.setMinimumSize(new Dimension(50, 200));
@@ -132,7 +143,7 @@ private JTextField textField;
     
     /////////
     
-    Box bottomBox = Box.createHorizontalBox();
+    bottomBox = Box.createHorizontalBox();
     bottomBox.setOpaque(true);
     bottomBox.setBackground(new Color(90, 90, 90));
     
@@ -145,10 +156,7 @@ private JTextField textField;
     DropTarget dt = new DropTarget(textField, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetListener() {
 		
 		@Override
-		public void dropActionChanged(DropTargetDragEvent dtde) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void dropActionChanged(DropTargetDragEvent dtde) {	}
 		
 		@Override
 		public void drop(DropTargetDropEvent dtde) {
@@ -177,9 +185,7 @@ private JTextField textField;
 					
 						
 					dtde.dropComplete(true);
-					return;
-					
-					
+					return;		
 				
 			}
 				dtde.rejectDrop();
@@ -190,19 +196,14 @@ private JTextField textField;
 				System.out.println("scheisse");
 				dtde.dropComplete(false);
 			}
+			settingsListener.UIChanged();
 		}
 		
 		@Override
-		public void dragOver(DropTargetDragEvent dtde) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void dragOver(DropTargetDragEvent dtde) {	}
 		
 		@Override
-		public void dragExit(DropTargetEvent dte) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void dragExit(DropTargetEvent dte) {		}
 		
 		@Override
 		public void dragEnter(DropTargetDragEvent dtde) {
@@ -248,7 +249,8 @@ private JTextField textField;
 	});
     bottomBox.add(btnSend);
     
-    Box verticalBox = Box.createVerticalBox();
+    verticalBox = Box.createVerticalBox();
+   // verticalBox.add(topTopBox);
     verticalBox.add(topBox);
     verticalBox.add(bottomBox);
     
@@ -302,11 +304,54 @@ private JTextField textField;
 	  
 	  Boolean highlighted = name.equals("Server");
 	  messagesModel.addRow(new Object[]{date, name, text},highlighted);
+	  
+	  if(!name.equals(username))
+		  Toolkit.getDefaultToolkit().beep();
   }
   
   public void addEntry(String date, String name, BufferedImage image){
 	  messagesModel = (TableModel) messageTable.getModel();
 	  messagesModel.addRow(new Object[]{date, name, image});
+	  
   }
+  
+  public void setGUI(boolean dark){
+	 
+	  if(dark)
+	  {
+		  getJMenuBar().setBackground(darkColor);
+		  changeGUI.setBackground(darkColor);
+		  messageTable.setBackground(darkColor);
+		  userTable.setBackground(darkColor);
+		  setMediaFolder.setBackground(darkColor);
+		  messageTableScroller.setBackground(darkColor);
+		  messageTableScroller.getViewport().setBackground(darkColor);
+		  bottomBox.setBackground(darkColor);
+		  userTableScroller.setBackground(darkColor);
+		  verticalBox.setBackground(darkColor);
+	  }
+	  
+	  else
+	  {
+		  getJMenuBar().setBackground(brightColor);
+		  changeGUI.setBackground(brightColor);
+		  messageTable.setBackground(brightColor);
+		  userTable.setBackground(brightColor);
+		  setMediaFolder.setBackground(brightColor);
+		  messageTableScroller.setBackground(brightColor);
+		  messageTableScroller.getViewport().setBackground(brightColor); 
+		  bottomBox.setBackground(brightColor);
+		  userTableScroller.setBackground(brightColor);
+		  verticalBox.setBackground(brightColor);
+	  }
+  }
+
+@Override
+public void actionPerformed(ActionEvent e) {
+	  if(e.getSource() == changeGUI)
+		  settingsListener.UIChanged();
+	  else if(e.getSource() == setMediaFolder)
+		  settingsListener.pathChanged();
+}
 
 }

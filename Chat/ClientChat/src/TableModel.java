@@ -27,4 +27,7 @@ public class TableModel extends DefaultTableModel
 		renderer.scrollToBottom();
 	}
 
+	public TableCellRenderer getRenderer(){
+		return renderer;
+	}
 }
