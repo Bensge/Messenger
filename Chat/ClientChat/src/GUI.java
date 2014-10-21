@@ -22,6 +22,7 @@ import java.util.List;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -69,8 +70,6 @@ private static final long serialVersionUID = 1L;
 	}
 	settingsListener = new Settings(this);
 	
-	setTitle("Messenger");
-	
 	username = Login.getUserName();
 	
 	setTitle("Messenger: " + username);
@@ -83,7 +82,7 @@ private static final long serialVersionUID = 1L;
     Box topBox = Box.createHorizontalBox();
     
     menuBar = new JMenuBar();
-    look = new JMenu("Edit Design");
+    look = new JMenu("Design");
     other = new JMenu("Other");
     changeGUI = new JMenuItem("Change Design");
     setMediaFolder = new JMenuItem("Set Media Folder");
@@ -372,7 +371,18 @@ public void actionPerformed(ActionEvent e) {
 	  if(e.getSource() == changeGUI)
 		  settingsListener.UIChanged();
 	  else if(e.getSource() == setMediaFolder)
+	  {
+		  JFileChooser fc = new JFileChooser();
+		  fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		  int result = fc.showOpenDialog(new JFrame());
+		  if (result == JFileChooser.APPROVE_OPTION)
+		  {
+			  File dir = fc.getSelectedFile();
+			  System.out.println("Path: " + dir.getAbsolutePath());
+		  }
+		  
 		  settingsListener.pathChanged();
+	  }
 	  else if(e.getSource() == mute){
 		  isMuted = !isMuted;
 	  }
