@@ -55,7 +55,8 @@ public class ChatServer {
   public ChatServer() throws Exception
   {
     //Hello
-	if (System.getProperty("os.name").startsWith("Mac") || System.getProperty("os.name").startsWith("Windows 8"))
+	String os = System.getProperty("os.name");
+	if (os.startsWith("Mac") || os.startsWith("Windows 8") || os.startsWith("Linux"))
 	{
 		port = MessengerCommon.DEFAULT_PORT;
 	}

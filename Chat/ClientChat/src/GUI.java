@@ -64,6 +64,8 @@ private static final long serialVersionUID = 1L;
 	setTitle("Messenger");
 	
 	username = Login.getUserName();
+	
+	setTitle("Messenger: " + username);
 	  
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setBounds(100, 100, 800, 600);
@@ -151,7 +153,7 @@ private static final long serialVersionUID = 1L;
     //50 is actually too small, but the group and with it the text field always has at least the button's height.
     textField.setMaximumSize(new Dimension(9999, 50));
     textField.setBackground(new Color(190, 190, 190));
-    textField.setText("\uE415" + "\uE056" + "\uE057" + "\u263a" + "abcd" + "\uF8FF");
+    //textField.setText("\uE415" + "\uE056" + "\uE057" + "\u263a" + "abcd" + "\uF8FF");
     //textField.setFont(new Font("Apple Color Emoji", Font.PLAIN, 10));
     DropTarget dt = new DropTarget(textField, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetListener() {
 		
@@ -329,6 +331,8 @@ private static final long serialVersionUID = 1L;
 		  bottomBox.setBackground(darkColor);
 		  userTableScroller.setBackground(darkColor);
 		  verticalBox.setBackground(darkColor);
+		  textField.setBackground(darkColor);
+		  textField.setForeground(brightColor);
 	  }
 	  
 	  else
@@ -343,6 +347,8 @@ private static final long serialVersionUID = 1L;
 		  bottomBox.setBackground(brightColor);
 		  userTableScroller.setBackground(brightColor);
 		  verticalBox.setBackground(brightColor);
+		  textField.setBackground(brightColor);
+		  textField.setForeground(darkColor);
 	  }
   }
 

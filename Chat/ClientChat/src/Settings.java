@@ -5,7 +5,7 @@ public class Settings implements SettingsListener{
 	public static int UIChange = 0;
 	public static int pathChange = 1;
 	
-	private boolean isDark = true;
+	private boolean isDark = false;
 	private String path;
 	private GUI gui;
 	
