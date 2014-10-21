@@ -72,9 +72,9 @@ private JTextField textField;
 
   public GUI() {
 	  
-	setTitle("Messenger");
-	  
 	username = Login.getUserName();
+	
+	setTitle("Messenger: " + username);
 	  
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setBounds(100, 100, 800, 600);
@@ -140,7 +140,7 @@ private JTextField textField;
     //50 is actually too small, but the group and with it the text field always has at least the button's height.
     textField.setMaximumSize(new Dimension(9999, 50));
     textField.setBackground(new Color(190, 190, 190));
-    textField.setText("\uE415" + "\uE056" + "\uE057" + "\u263a" + "abcd" + "\uF8FF");
+    //textField.setText("\uE415" + "\uE056" + "\uE057" + "\u263a" + "abcd" + "\uF8FF");
     //textField.setFont(new Font("Apple Color Emoji", Font.PLAIN, 10));
     DropTarget dt = new DropTarget(textField, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetListener() {
 		

@@ -107,8 +107,8 @@ public class TableCellRenderer extends DefaultTableCellRenderer implements Compo
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
-		useNameColor = column == 1;
-		useDateColor = column == 0;
+		useNameColor = column == 1 || table.getColumnCount() == 1;
+		useDateColor = column == 0 && table.getColumnCount() > 1;
 		
 		useLightBackgroundColor = highlightedRows.size() > row && highlightedRows.get(row); 
 		
