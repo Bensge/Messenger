@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -53,8 +54,10 @@ private static final long serialVersionUID = 1L;
   private JMenuBar menuBar;
   private JMenu look, other;
   private JMenuItem changeGUI, setMediaFolder;
+  private JCheckBoxMenuItem mute;
   private Box bottomBox, verticalBox;
   
+  private boolean isMuted = false;
   private SettingsListener settingsListener;
   private DataSendListener dataListener;
 
@@ -79,12 +82,15 @@ private static final long serialVersionUID = 1L;
     other = new JMenu("Other");
     changeGUI = new JMenuItem("Change Design");
     setMediaFolder = new JMenuItem("Set Media Folder");
+    mute = new JCheckBoxMenuItem("Mute all Sounds");
     
+    mute.addActionListener(this);
     changeGUI.addActionListener(this);
     setMediaFolder.addActionListener(this);
     
     look.add(changeGUI);
     other.add(setMediaFolder);
+    other.add(mute);
     
     //menuBar.add(changeGui);
     menuBar.add(look);
@@ -307,7 +313,7 @@ private static final long serialVersionUID = 1L;
 	  Boolean highlighted = name.equals("Server");
 	  messagesModel.addRow(new Object[]{date, name, text},highlighted);
 	  
-	  if(!name.equals(username))
+	  if(!name.equals(username) && !isMuted)
 		  Toolkit.getDefaultToolkit().beep();
   }
   
@@ -358,6 +364,9 @@ public void actionPerformed(ActionEvent e) {
 		  settingsListener.UIChanged();
 	  else if(e.getSource() == setMediaFolder)
 		  settingsListener.pathChanged();
+	  else if(e.getSource() == mute){
+		  isMuted = !isMuted;
+	  }
 }
 
 }
