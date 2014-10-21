@@ -111,12 +111,6 @@ public class ChatServer {
   {
 	  clients.add(client);
 	  
-	 /* //Notify other clients
-	  MessageReceivePacket packet = new MessageReceivePacket();
-	  packet.sender = "Server";
-	  packet.text = "User joined!";
-	  packet.timestamp = MessengerCommon.currentUnixTime();
-	  sendPacketToClientsBut(client, packet);*/
   }
   
   public void unregisterClient(Client client)
@@ -166,9 +160,11 @@ public class ChatServer {
 	  else if (packet instanceof MessageImagePacket)
 	  {
 		  newPacket = packet;
+		  System.out.println("right one");
 	  }
-	  else if(packet instanceof MessageFilePacket){
+	  else if(packet instanceof MessageFilePacket){//instance of wrong cause of subclass stuff
 		  newPacket = packet;
+		  System.out.println("wrong one");
 	  }
 	  
 	  if (newPacket != null)

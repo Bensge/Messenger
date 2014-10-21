@@ -35,6 +35,7 @@ public class ClientReadingWorker extends SwingWorker<Void, ChatPacket> {
 	    {
 	    	//Clean out prePacket for the case that it's filled with the old package.
 	    	Arrays.fill( prePacket, (byte) 0 );
+
 	        int result = in.read(prePacket,0,8);
 	        
 	        if (result == -1)

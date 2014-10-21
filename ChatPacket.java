@@ -3,9 +3,11 @@ package Common;
 import java.awt.TrayIcon.MessageType;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import javax.imageio.ImageIO;
 
 
@@ -112,7 +114,7 @@ public class ChatPacket {
 		}
 		else if (packetType == MessageImagePacket.packetID)
 		{
-			MessageImagePacket p = new MessageImagePacket();
+			/*MessageImagePacket p = new MessageImagePacket();
 			byte[] imageData = bulkPacket;
 			InputStream in = new ByteArrayInputStream(imageData);
 			try {
@@ -121,7 +123,64 @@ public class ChatPacket {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			packet = p;
+			packet = p;*/
+			System.out.println(packetType+ "got called");
+			MessageImagePacket p = new MessageImagePacket();
+			byte[] data = bulkPacket;
+			try {
+				p.length = data.length;
+				
+				int fileNameLength = MessengerCommon.intFromBuffer(data, 0);
+				
+				p.fileName = new String(bulkPacket, 4, fileNameLength);
+				
+				//MessengerCommon.intFromBuffer(buffer, offset)
+								
+				File f = new File(p.fileName);
+				FileOutputStream fos = new FileOutputStream(f);
+				//fos.write(data);
+				fos.write(data, 4 + fileNameLength, data.length - (4 + fileNameLength));
+				fos.flush();
+				p.file = f;
+				
+				packet = p;
+				
+				fos.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else if(packetType == MessageFilePacket.packetID){
+			MessageFilePacket p = new MessageFilePacket();
+			System.out.println(packetType+ "got called th wrong way");
+			byte[] data = bulkPacket;
+			try {
+				p.length = data.length;
+				
+				int fileNameLength = MessengerCommon.intFromBuffer(data, 0);
+				
+				p.fileName = new String(bulkPacket, 4, fileNameLength);
+				
+				//MessengerCommon.intFromBuffer(buffer, offset)
+								
+				File f = new File(p.fileName);
+				FileOutputStream fos = new FileOutputStream(f);
+				//fos.write(data);
+				fos.write(data, 4 + fileNameLength, data.length - (4 + fileNameLength));
+				fos.flush();
+				p.file = f;
+				
+				packet = p;
+				
+				fos.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 		}
 		
 		else if (packetType == MessageLoginPacket.packetID)

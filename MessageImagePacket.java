@@ -6,15 +6,25 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class MessageImagePacket extends ChatPacket {
+public class MessageImagePacket extends MessageFilePacket {
 	public static int packetID = 5;
+
+	public BufferedImage getBufferedImage() {
+		try {
+			return ImageIO.read(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
-	public BufferedImage image;
+	//public BufferedImage image;
 	
 	
 	public byte[] generateDataPacket()
 	{
-		// convert BufferedImage to byte array
+		return super.generateDataPacket();
+		/*// convert BufferedImage to byte array
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		byte[] imageData = null;
 		try {
@@ -28,6 +38,6 @@ public class MessageImagePacket extends ChatPacket {
 		}
 		
 		this.length = imageData.length;
-		return imageData;
+		return imageData;*/
 	}
 }
