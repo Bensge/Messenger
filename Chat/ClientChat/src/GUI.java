@@ -34,6 +34,8 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import Common.MessageUserActionPacket.Action;
+
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -49,6 +51,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -59,8 +62,11 @@ private static final long serialVersionUID = 1L;
 private JTextField textField;
   private JButton btnSend;
   private JButton emojiButton;
-  private TableModel model;
+  private TableModel messagesModel;
   private JTable messageTable;
+  private JTable userTable;
+  private TableModel userModel;
+  private ArrayList<String> users;
   public String username;
   private DataSendListener dataListener;
 
@@ -81,8 +87,8 @@ private JTextField textField;
     
     
     messageTable = new JTable(null);
-    TableModel model = new TableModel(rowData, columns, messageTable);
-    messageTable.setModel(model);
+    messagesModel = new TableModel(rowData, columns, messageTable);
+    messageTable.setModel(messagesModel);
     
     
     messageTable.getColumnModel().getColumn(0).setMinWidth(10);
@@ -103,6 +109,28 @@ private JTextField textField;
     messageTableScroller.setPreferredSize(new Dimension(500, 220));
     
     topBox.add(messageTableScroller);
+    
+    //User table
+    
+    Object[] userColumns = { "User" };
+    users = new ArrayList<String>();
+    
+    userTable = new JTable(null);
+    userModel = new TableModel(rowData, userColumns, userTable);
+    userTable.setModel(userModel);
+    
+    JScrollPane userTableScroller = new JScrollPane(userTable);
+    userTableScroller.setBackground(new Color(35, 34, 34));
+    userTableScroller.getViewport().setBackground(new Color(35, 34, 34));
+    userTableScroller.setMinimumSize(new Dimension(50, 200));
+    userTableScroller.setPreferredSize(new Dimension(80, 220));
+    
+    topBox.add(userTableScroller);
+    Object[] data = { username };
+    users.add(username);
+    userModel.addRow(data);
+    
+    /////////
     
     Box bottomBox = Box.createHorizontalBox();
     bottomBox.setOpaque(true);
@@ -261,17 +289,32 @@ private JTextField textField;
 	  dataListener = listener;
   }
 
+  public void noteUserAction(Action action, String user)
+  {
+	  if (action == Action.Join)
+	  {
+		  users.add(user);
+		  Object[] data = { user };
+		  userModel.addRow(data);
+	  }
+	  else if (action == Action.Leave)
+	  {
+		  int index = users.indexOf(user);
+		  userModel.removeRow(index);
+		  users.remove(index);
+	  }
+  }
 
   public void addEntry(String date, String name, String text){
-	  model = (TableModel) messageTable.getModel();
+	  messagesModel = (TableModel) messageTable.getModel();
 	  
 	  Boolean highlighted = name.equals("Server");
-	  model.addRow(new Object[]{date, name, text},highlighted);
+	  messagesModel.addRow(new Object[]{date, name, text},highlighted);
   }
   
   public void addEntry(String date, String name, BufferedImage image){
-	  model = (TableModel) messageTable.getModel();
-	  model.addRow(new Object[]{date, name, image});
+	  messagesModel = (TableModel) messageTable.getModel();
+	  messagesModel.addRow(new Object[]{date, name, image});
   }
 
 }

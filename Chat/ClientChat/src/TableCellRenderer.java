@@ -124,6 +124,8 @@ public class TableCellRenderer extends DefaultTableCellRenderer implements Compo
 	
 	public void relayout()
 	{
+		if (table.getColumnCount() <= 1)
+			return;
 		int tableWidth = table.getColumn("Message").getWidth();
 		int tableHeight = table.getHeight();
 		

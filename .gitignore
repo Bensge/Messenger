@@ -83,3 +83,7 @@ local.properties
 # PDT-specific
 .buildpath
 *.class
+
+*.class
+
+*.class

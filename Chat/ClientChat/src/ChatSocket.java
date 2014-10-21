@@ -14,6 +14,7 @@ import java.util.Date;
 import javax.swing.ImageIcon;
 
 import Common.*;
+import Common.MessageUserActionPacket.Action;
 
 
 public class ChatSocket{
@@ -177,6 +178,7 @@ public void sendText(String msg){
 	  }
 	  else if(packet instanceof MessageLoginPacket)
 	  {
+		  System.out.println("This should not be called anymore!!! Deprecated!!! ");
 		  
 		  MessageLoginPacket p = (MessageLoginPacket) packet;
 		  
@@ -184,6 +186,23 @@ public void sendText(String msg){
 		  String name = p.name;
 
 		  gui.addEntry(date, "Server", name + " joined");
+	  }
+	  else if (packet instanceof MessageUserActionPacket)
+	  {
+		  MessageUserActionPacket p = (MessageUserActionPacket)packet;
+		  System.out.println("Packet: " + packet.toString());
+		  
+		  
+		  gui.noteUserAction(p.action, p.user);
+		  //Only show server message if the action is relevant and just happened.
+		  if (p.isCurrent)
+		  {
+			  String date = new SimpleDateFormat("HH:mm").format(new Date());
+			  String sender = "Server";
+			  String text = p.user + " " + (p.action == Action.Join ? "joined" : "left");
+			  
+			  gui.addEntry(date, sender, text);
+		  }
 	  }
   }
 }

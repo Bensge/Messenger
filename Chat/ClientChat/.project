@@ -36,6 +36,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/MessageSendPacket.java</locationURI>
 		</link>
 		<link>
+			<name>src/Common/MessageUserActionPacket.java</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/MessageUserActionPacket.java</locationURI>
+		</link>
+		<link>
 			<name>src/Common/MessengerCommon.java</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/MessengerCommon.java</locationURI>

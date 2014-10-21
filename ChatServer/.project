@@ -21,9 +21,19 @@
 			<locationURI>PARENT-1-PROJECT_LOC/ChatPacket.java</locationURI>
 		</link>
 		<link>
+			<name>src/Common/MessageFilePacket.java</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/MessageFilePacket.java</locationURI>
+		</link>
+		<link>
 			<name>src/Common/MessageImagePacket.java</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/MessageImagePacket.java</locationURI>
+		</link>
+		<link>
+			<name>src/Common/MessageLoginPacket.java</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/MessageLoginPacket.java</locationURI>
 		</link>
 		<link>
 			<name>src/Common/MessageReceivePacket.java</name>
@@ -34,6 +44,11 @@
 			<name>src/Common/MessageSendPacket.java</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/MessageSendPacket.java</locationURI>
+		</link>
+		<link>
+			<name>src/Common/MessageUserActionPacket.java</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/MessageUserActionPacket.java</locationURI>
 		</link>
 		<link>
 			<name>src/Common/MessengerCommon.java</name>

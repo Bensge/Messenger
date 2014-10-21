@@ -12,7 +12,9 @@ import Common.MessageImagePacket;
 import Common.MessageLoginPacket;
 import Common.MessageReceivePacket;
 import Common.MessageSendPacket;
+import Common.MessageUserActionPacket;
 import Common.MessengerCommon;
+import Common.MessageUserActionPacket.Action;
 
 public class ChatServer {
   
@@ -122,10 +124,8 @@ public class ChatServer {
 	  clients.remove(client);
 	  
 	  //Notify other clients
-	  MessageReceivePacket packet = new MessageReceivePacket();
-	  packet.sender = "Server";
-	  packet.text = "User " + client.getName() + " left!";
-	  packet.timestamp = MessengerCommon.currentUnixTime();
+	  MessageUserActionPacket packet = new MessageUserActionPacket(client.getName(), Action.Leave, true);
+	  
 	  sendPacketToClientsBut(client, packet);
   }
   
@@ -150,11 +150,17 @@ public class ChatServer {
 		  MessageReceivePacket confirmationPacket = MessageReceivePacket.serverMessagePacket("You joined!");
 		  sender.send(confirmationPacket);
 		  
+		  for (Client client : clients)
+		  {
+			  if (client == sender)
+				  continue;
+			  //Let newly joined sender know which other clients are connected
+			  MessageUserActionPacket user = new MessageUserActionPacket(client.getName(), Action.Join, false);
+			  sender.send(user);
+		  }
+		  
 		  //Notify other clients
-		  MessageReceivePacket p = new MessageReceivePacket();
-		  p.sender = "Server";
-		  p.text = "User " + sender.getName() + " joined!";
-		  p.timestamp = MessengerCommon.currentUnixTime();
+		  MessageUserActionPacket p = new MessageUserActionPacket(sender.getName(), Action.Join, true);
 		  newPacket = p;
 	  }
 	  else if (packet instanceof MessageImagePacket)
@@ -164,7 +170,9 @@ public class ChatServer {
 	  else if(packet instanceof MessageFilePacket){
 		  newPacket = packet;
 	  }
-	  sendPacketToClientsBut(sender,newPacket);
+	  
+	  if (newPacket != null)
+		  sendPacketToClientsBut(sender,newPacket);
   }
   
   public void sendPacketToClientsBut(Client sender, ChatPacket newPacket)

@@ -1,5 +1,6 @@
 package Common;
 
+import java.awt.TrayIcon.MessageType;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -123,9 +124,26 @@ public class ChatPacket {
 			packet = p;
 		}
 		
-		else if(packetType == MessageLoginPacket.packetID){
+		else if (packetType == MessageLoginPacket.packetID)
+		{
 			MessageLoginPacket p = new MessageLoginPacket();
 			p.name = new String(bulkPacket);
+			packet = p;
+		}
+		
+		else if (packetType == MessageUserActionPacket.packetID)
+		{
+			MessageUserActionPacket p = new MessageUserActionPacket();
+			
+			byte action = bulkPacket[0];
+			p.action = MessageUserActionPacket.Action.values()[(int)action];
+			
+			boolean isC = bulkPacket[1] != 0;
+			p.isCurrent = isC;
+			
+			String user = new String(bulkPacket, 6, bulkPacket.length - 6);
+			p.user = user;
+			
 			packet = p;
 		}
 		
