@@ -62,6 +62,11 @@ private static final long serialVersionUID = 1L;
   private DataSendListener dataListener;
 
   public GUI() {
+	
+	if (System.getProperty("os.name").startsWith("Mac"))
+	{
+		System.setProperty("apple.laf.useScreenMenuBar", "true");
+	}
 	settingsListener = new Settings(this);
 	
 	setTitle("Messenger");
@@ -122,10 +127,12 @@ private static final long serialVersionUID = 1L;
     
     //messageTable.setMaximumSize(new Dimension(9999, 300));
     messageTableScroller = new JScrollPane(messageTable);
-    messageTableScroller.setBackground(new Color(35, 34, 34));
+    //messageTableScroller.setBackground(new Color(35, 34, 34));
     messageTableScroller.getViewport().setBackground(new Color(35, 34, 34));
     messageTableScroller.setMinimumSize(new Dimension(350, 200));
     messageTableScroller.setPreferredSize(new Dimension(500, 220));
+    messageTableScroller.setBackground(brightColor);
+	messageTableScroller.getViewport().setBackground(brightColor);
     
     topBox.add(messageTableScroller);
     
@@ -139,10 +146,11 @@ private static final long serialVersionUID = 1L;
     userTable.setModel(userModel);
     
     userTableScroller = new JScrollPane(userTable);
-    userTableScroller.setBackground(new Color(35, 34, 34));
+    //userTableScroller.setBackground(new Color(35, 34, 34));
     userTableScroller.getViewport().setBackground(new Color(35, 34, 34));
     userTableScroller.setMinimumSize(new Dimension(50, 200));
     userTableScroller.setPreferredSize(new Dimension(80, 220));
+    userTableScroller.setBackground(brightColor);
     
     topBox.add(userTableScroller);
     Object[] data = { username };
@@ -153,7 +161,8 @@ private static final long serialVersionUID = 1L;
     
     bottomBox = Box.createHorizontalBox();
     bottomBox.setOpaque(true);
-    bottomBox.setBackground(new Color(90, 90, 90));
+    //bottomBox.setBackground(new Color(90, 90, 90));
+    bottomBox.setBackground(new Color(255, 255, 255));
     
     textField = new JTextField();
     //50 is actually too small, but the group and with it the text field always has at least the button's height.
@@ -323,9 +332,9 @@ private static final long serialVersionUID = 1L;
 	  
   }
   
-  public void setGUI(boolean dark){
-	 
-	  if(dark)
+  public void setGUI(boolean dark)
+  {
+	  if (dark)
 	  {
 		  getJMenuBar().setBackground(darkColor);
 		  changeGUI.setBackground(darkColor);

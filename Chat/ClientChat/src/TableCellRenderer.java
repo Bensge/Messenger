@@ -45,8 +45,6 @@ public class TableCellRenderer extends DefaultTableCellRenderer implements Compo
 		this.table.setIntercellSpacing(new Dimension(0, 0));
 		this.scrollToBottom = false;
 		this.highlightedRows = new ArrayList<Boolean>();
-		dark = true;
-		useLightBackgroundColor = true;
 	}
 	
 	@Override
@@ -57,8 +55,12 @@ public class TableCellRenderer extends DefaultTableCellRenderer implements Compo
 			g.drawImage(image, 0, 0, imageDimension.x, imageDimension.y,null);
 		}
 		else {
-			Color color = new Color(170, 170, 170);
-			//Color color = Color.RED;
+			Color color;
+			if (!dark)
+				color = new Color(0,0,0);
+			else
+				color = new Color(170, 170, 170);
+			
 			if (useNameColor)
 			{
 				String text = this.getText();
@@ -74,22 +76,24 @@ public class TableCellRenderer extends DefaultTableCellRenderer implements Compo
 			}
 			else if (useDateColor)
 			{
-				color = new Color(138,138,138);
+				if (!dark)
+					color = new Color(0,0,0);
+				else
+					color = new Color(138,138,138);
 			}
 			
 			setForeground(color);
 			
 			if (useLightBackgroundColor)
 			{
-				if(dark)
-					this.setBackground(new Color(50, 50, 50
-							));
-				else
+				if (!dark)
 					this.setBackground(new Color(245, 245, 245));
+				else
+					this.setBackground(new Color(50, 50, 50));
 			}
 			else
 			{
-				if(dark)
+				if (!dark)
 					this.setBackground(new Color(255, 255, 255));
 				else
 					this.setBackground(new Color(0, 0, 0));
@@ -125,7 +129,7 @@ public class TableCellRenderer extends DefaultTableCellRenderer implements Compo
 		useNameColor = column == 1 || table.getColumnCount() == 1;
 		useDateColor = column == 0 && table.getColumnCount() > 1;
 		
-		//useLightBackgroundColor = highlightedRows.size() > row && highlightedRows.get(row); 
+		useLightBackgroundColor = highlightedRows.size() > row && highlightedRows.get(row); 
 		
 		return super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
 				row, column);
