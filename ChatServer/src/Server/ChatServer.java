@@ -1,6 +1,10 @@
 package Server;
+import java.io.IOException;
 import java.net.*;
+
 import javax.jmdns.JmDNS;
+import javax.jmdns.ServiceInfo;
+
 import java.util.ArrayList;
 import java.awt.EventQueue;
 
@@ -90,7 +94,23 @@ public class ChatServer {
       System.out.println("Error getting local IP address: " + e.toString());
     }
     
-    JmDNS dnsServer;
+    JmDNS dnsServer = null;
+	try {
+		dnsServer = JmDNS.create();
+	} catch (IOException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+    ServiceInfo info = ServiceInfo.create("messenger._tcp.local.","Messenger",port,"Messenger chat thingy");
+    try {
+		dnsServer.registerService(info);
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    
+    System.out.println("Set up DNS server: " + info.toString());
+    
   }
   
   private void tearDown()
