@@ -1,5 +1,6 @@
 package Server;
 import java.net.*;
+import javax.jmdns.JmDNS;
 import java.util.ArrayList;
 import java.awt.EventQueue;
 
@@ -88,6 +89,8 @@ public class ChatServer {
     } catch(Exception e) {
       System.out.println("Error getting local IP address: " + e.toString());
     }
+    
+    JmDNS dnsServer;
   }
   
   private void tearDown()
