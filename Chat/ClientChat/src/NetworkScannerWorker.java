@@ -35,6 +35,7 @@ public class NetworkScannerWorker extends SwingWorker<Void, ServiceEvent>{
 		    		System.out.println("Service added: " + event.toString());
 		    		eventType = 0;
 		    		e = event;
+		    		publish(event);
 		    	}
 
 				@Override
@@ -43,6 +44,7 @@ public class NetworkScannerWorker extends SwingWorker<Void, ServiceEvent>{
 					System.out.println("Service removed: " + event.toString());
 					eventType = 1;
 					e = event;
+					publish(event);
 				}
 
 				@Override
@@ -51,11 +53,11 @@ public class NetworkScannerWorker extends SwingWorker<Void, ServiceEvent>{
 					System.out.println("Service resolved: " + event.toString());
 					eventType = 2;
 					e = event;
+					publish(event);
 				}
 		    });
 		    
-		    
-		    publish(e);
+		   
 		    
 		    return null;
 	}
@@ -64,6 +66,8 @@ public class NetworkScannerWorker extends SwingWorker<Void, ServiceEvent>{
 	@Override
 	protected void process(List<ServiceEvent> chunks) {
 		super.process(chunks);
+		
+		System.out.println("number =" + eventType);
 		
 		for(ServiceEvent chunk : chunks){
 			if(eventType == 1){

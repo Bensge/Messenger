@@ -126,6 +126,7 @@ public class Login extends JFrame implements ActionListener{
 		contentPane.add(scrollPane);
 		
 		NetworkScannerWorker scannerWorker = new NetworkScannerWorker(this);
+		scannerWorker.execute();
 		
 		
 		JMenu mnNewMenu = new JMenu("Einstellungen");

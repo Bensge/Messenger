@@ -82,6 +82,7 @@ public class ChatSocket{
     
    
     
+    
     sendName(name);
     //Let's go a different route here.
     //run();  
@@ -205,7 +206,6 @@ public void sendText(String msg){
 	  }
   }
 }
-  
 
 
 
