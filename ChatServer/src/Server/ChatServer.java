@@ -101,7 +101,7 @@ public class ChatServer {
 		// TODO Auto-generated catch block
 		e1.printStackTrace();
 	}
-    ServiceInfo info = ServiceInfo.create("messenger._tcp.local.","Messenger",port,"Messenger chat thingy");
+    ServiceInfo info = ServiceInfo.create("messenger","Messenger",port,"Messenger chat thingy");
     try {
 		dnsServer.registerService(info);
 	} catch (IOException e) {
