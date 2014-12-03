@@ -10,6 +10,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -89,12 +90,14 @@ public class ChatSocket{
     System.out.println("Setting up DNS");
     JmDNS dns = null;
 	try {
-		dns = JmDNS.create();
+		 InetAddress addr1 = InetAddress.getLocalHost();
+		 String hostname = InetAddress.getByName(addr1.getHostName()).toString();
+		dns = JmDNS.create(addr1, hostname);
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-    dns.addServiceListener("messenger._tcp.local.", new ServiceListener(){
+    dns.addServiceListener("messenger", new ServiceListener(){
     	@Override
     	public void serviceAdded(ServiceEvent event){
     		System.out.println("Service added: " + event.toString());
