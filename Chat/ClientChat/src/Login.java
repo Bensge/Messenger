@@ -24,7 +24,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 
 
-public class Login extends JFrame implements ActionListener{
+public class Login extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private ChatSocket socket;
@@ -37,6 +37,7 @@ public class Login extends JFrame implements ActionListener{
 	private JTextField nameTextField;
 	private JTable serverTable;
 	private ArrayList<ServiceEvent> servers;
+	private NetworkScannerWorker scannerWorker;
 	JButton OK_Button;
 	JButton Cancel_Button;
 	JButton bennoButton; 
@@ -130,7 +131,7 @@ public class Login extends JFrame implements ActionListener{
 		contentPane.add(scrollPane);
 		servers = new ArrayList<ServiceEvent>();
 	
-		NetworkScannerWorker scannerWorker = new NetworkScannerWorker(this);
+		scannerWorker = new NetworkScannerWorker(this);
 		scannerWorker.execute();
 
 		
@@ -196,6 +197,7 @@ public class Login extends JFrame implements ActionListener{
 			address = e.getInfo().getInetAddress().getHostAddress();
 			System.out.println("Address: " + address);
 		}
+		scannerWorker.stop();
 		
 		socket = new ChatSocket(address, port, this);
 	}
