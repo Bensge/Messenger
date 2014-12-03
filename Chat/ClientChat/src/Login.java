@@ -127,6 +127,10 @@ public class Login extends JFrame implements ActionListener{
 		
 		NetworkScannerWorker scannerWorker = new NetworkScannerWorker(this);
 		scannerWorker.execute();
+<<<<<<< HEAD
+=======
+		
+>>>>>>> ac91f37e708e7b1c287c511be36e461e552f4d38
 		
 		JMenu mnNewMenu = new JMenu("Einstellungen");
 		mnNewMenu.setBounds(0, 0, 157, 36);
