@@ -126,7 +126,7 @@ public class Login extends JFrame implements ActionListener{
 		contentPane.add(scrollPane);
 		
 		NetworkScannerWorker scannerWorker = new NetworkScannerWorker(this);
-		
+		scannerWorker.execute();
 		
 		JMenu mnNewMenu = new JMenu("Einstellungen");
 		mnNewMenu.setBounds(0, 0, 157, 36);
@@ -180,20 +180,16 @@ public class Login extends JFrame implements ActionListener{
 	
 	  //JmDNS Server discovery
 	  
-	  public void serviceAdded(ServiceEvent event){
-		  System.out.println("Service added: " + event.toString());
+	  public void serviceAdded(ServiceEvent event) {
 	  }
 	
 	  public void serviceRemoved(ServiceEvent event) {
-		// TODO Auto-generated method stub
-		  System.out.println("Service removed: " + event.toString());
+		
 	  }
 	
 	  public void serviceResolved(ServiceEvent event) {
-		  // TODO Auto-generated method stub
-		  System.out.println("Service resolved: " + event.toString());
 		  DefaultTableModel model = (DefaultTableModel) serverTable.getModel();
-		  model.addRow(new Object[]{event.toString()});
+		  model.addRow(new Object[]{event.getName()});
 	  }
 
 }
