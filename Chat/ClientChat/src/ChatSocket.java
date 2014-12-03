@@ -2,14 +2,10 @@
 import java.awt.event.ActionEvent;
 
 import javax.jmdns.*;
-import javax.jmdns.impl.*;
-
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -17,8 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.swing.ImageIcon;
 
 import Common.*;
 import Common.MessageUserActionPacket.Action;
@@ -86,43 +80,7 @@ public class ChatSocket{
 
 	});
     
-    System.out.println("Setting up DNS");
-    JmDNS dns = null;
-	try {
-		dns = JmDNS.create();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} 
-    dns.addServiceListener("_messenger._tcp.local.", new ServiceListener(){
-    	@Override
-    	public void serviceAdded(ServiceEvent event){
-    		System.out.println("Service added: " + event.toString());
-    	}
-
-		@Override
-		public void serviceRemoved(ServiceEvent event) {
-			// TODO Auto-generated method stub
-			System.out.println("Service removed: " + event.toString());
-		}
-
-		@Override
-		public void serviceResolved(ServiceEvent event) {
-			// TODO Auto-generated method stub
-			System.out.println("Service resolved: " + event.toString());
-		}
-    });
-    
-    ServiceInfo[] services = dns.list("_messenger._tcp.local.");
-    List<ServiceInfo> transcodingServices = new ArrayList();
-    for(ServiceInfo service : services) {
-        //if(service.getName().equals("messenger._tcp.local.")) {
-               transcodingServices.add(service);
-        //}
-    }
-    
-    System.out.println("services: " + transcodingServices.toString());
-    
+   
     
     sendName(name);
     //Let's go a different route here.
