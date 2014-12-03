@@ -20,6 +20,7 @@ import javax.swing.JMenu;
 import Common.MessengerCommon;
 
 import java.awt.Font;
+import java.net.InetAddress;
 import java.util.ArrayList;
 
 
@@ -38,6 +39,7 @@ public class Login extends JFrame implements ActionListener{
 	private ArrayList<ServiceEvent> servers;
 	JButton OK_Button;
 	JButton Cancel_Button;
+	JButton bennoButton; 
 	/**
 	 * Launch the application.
 	 */
@@ -81,7 +83,7 @@ public class Login extends JFrame implements ActionListener{
 		IPTextField = new JTextField();
 		IPTextField.setToolTipText("Enter an IP");
 		IPTextField.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		IPTextField.setBounds(236, 248, 165, 36);
+		IPTextField.setBounds(342, 259, 165, 36);
 		contentPane.add(IPTextField);
 		IPTextField.setColumns(10);
 		
@@ -94,26 +96,26 @@ public class Login extends JFrame implements ActionListener{
 		nameTextField.requestFocus(false);
 		nameTextField.requestFocus();
 		//nameTextField.setHorizontalAlignment(JTextField.LEFT);
-		nameTextField.setBounds(236, 123, 165, 36);
+		nameTextField.setBounds(342, 143, 165, 36);
 		contentPane.add(nameTextField);
 		
 		JLabel nameField = new JLabel("Enter a username:");
 		nameField.setHorizontalAlignment(SwingConstants.CENTER);
-		nameField.setBounds(236, 76, 165, 47);
+		nameField.setBounds(342, 66, 165, 47);
 		contentPane.add(nameField);
 		
 		JLabel IP_Field = new JLabel("Enter the IP you want to connect to (or <enter> for localhost):");
 		IP_Field.setHorizontalAlignment(SwingConstants.CENTER);
-		IP_Field.setBounds(132, 185, 391, 63);
+		IP_Field.setBounds(232, 192, 382, 70);
 		contentPane.add(IP_Field);
 		
 		OK_Button = new JButton("OK");
-		OK_Button.setBounds(165, 353, 125, 36);
+		OK_Button.setBounds(360, 335, 125, 36);
 		OK_Button.addActionListener(this);
 		contentPane.add(OK_Button);
 		
 		Cancel_Button = new JButton("Cancel");
-		Cancel_Button.setBounds(360, 353, 125, 36);
+		Cancel_Button.setBounds(520, 335, 125, 36);
 		Cancel_Button.addActionListener(this);
 		contentPane.add(Cancel_Button);
 		
@@ -140,6 +142,11 @@ public class Login extends JFrame implements ActionListener{
 		mnNewMenu.add(lblIncoming);
 		
 		getRootPane().setDefaultButton(OK_Button);
+		
+		bennoButton = new JButton("Bennos' Server");
+		bennoButton.setBounds(178, 335, 125, 36);
+		bennoButton.addActionListener(this);
+		contentPane.add(bennoButton);
 	}
 
 	@Override
@@ -150,11 +157,23 @@ public class Login extends JFrame implements ActionListener{
 		else if(e.getSource().equals(Cancel_Button)){
 			System.exit(0);
 		}
+		else if(e.getSource().equals(bennoButton)){
+			connectToBenno();
+		}
 		
+	}
+	
+	private void connectToBenno(){
+		if(nameTextField.getText().equals("")){
+			JOptionPane.showMessageDialog(this, "Username can not be empty");
+			return;
+		}
+		
+		name = nameTextField.getText();
+		socket = new ChatSocket("192.210.214.47", port, this);
 	}
 
 	private void start() {
-		
 		
 		System.out.println("ok");
 		
@@ -181,7 +200,7 @@ public class Login extends JFrame implements ActionListener{
 		socket = new ChatSocket(address, port, this);
 	}
 	
-
+	//192.210.214.47
 	public static String getUserName() {
 		return name;
 	}
@@ -189,8 +208,6 @@ public class Login extends JFrame implements ActionListener{
 	public void complain() {
 		JOptionPane.showMessageDialog(this, "IP address seems to be wrong or Server is down");
 	}
-	
-	
 	
 	  //JmDNS Server discovery
 	  
@@ -206,5 +223,4 @@ public class Login extends JFrame implements ActionListener{
 		  model.addRow(new Object[]{"Server " + event.getName()});
 		  servers.add(event);
 	  }
-
 }
