@@ -67,7 +67,7 @@ public class Login extends JFrame implements ActionListener{
 		setResizable(true);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setBackground(Color.GREEN);
+		contentPane.setBackground(Color.ORANGE);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
