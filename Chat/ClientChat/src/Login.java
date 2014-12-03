@@ -3,10 +3,14 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.jmdns.ServiceEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -29,6 +33,7 @@ public class Login extends JFrame implements ActionListener{
 	private JPanel contentPane;
 	private JTextField IPTextField;
 	private JTextField nameTextField;
+	private JTable serverTable;
 	JButton OK_Button;
 	JButton Cancel_Button;
 	/**
@@ -110,6 +115,19 @@ public class Login extends JFrame implements ActionListener{
 		Cancel_Button.addActionListener(this);
 		contentPane.add(Cancel_Button);
 		
+		
+		JScrollPane scrollPane = new JScrollPane();
+		serverTable = new JTable(
+				new DefaultTableModel(
+					new Object[][]{{}}, new String[]{"Local Server"}
+				));
+		scrollPane.setViewportView(serverTable);
+		scrollPane.setBounds(20, 50, 200, 200);
+		contentPane.add(scrollPane);
+		
+		NetworkScannerWorker scannerWorker = new NetworkScannerWorker(this);
+		
+		
 		JMenu mnNewMenu = new JMenu("Einstellungen");
 		mnNewMenu.setBounds(0, 0, 157, 36);
 		contentPane.add(mnNewMenu);
@@ -148,6 +166,7 @@ public class Login extends JFrame implements ActionListener{
 		
 		socket = new ChatSocket(address, port, this);
 	}
+	
 
 	public static String getUserName() {
 		return name;
@@ -156,4 +175,25 @@ public class Login extends JFrame implements ActionListener{
 	public void complain() {
 		JOptionPane.showMessageDialog(this, "IP address seems to be wrong or Server is down");
 	}
+	
+	
+	
+	  //JmDNS Server discovery
+	  
+	  public void serviceAdded(ServiceEvent event){
+		  System.out.println("Service added: " + event.toString());
+	  }
+	
+	  public void serviceRemoved(ServiceEvent event) {
+		// TODO Auto-generated method stub
+		  System.out.println("Service removed: " + event.toString());
+	  }
+	
+	  public void serviceResolved(ServiceEvent event) {
+		  // TODO Auto-generated method stub
+		  System.out.println("Service resolved: " + event.toString());
+		  DefaultTableModel model = (DefaultTableModel) serverTable.getModel();
+		  model.addRow(new Object[]{event.toString()});
+	  }
+
 }

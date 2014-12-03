@@ -247,6 +247,7 @@ public void sendText(String msg){
 	  }
   }
 }
+  
 
 
 
