@@ -13,8 +13,7 @@ public class NetworkScannerWorker extends SwingWorker<Void, ServiceEvent>{
 
 	private int eventType;
 	private Login login;
-	private ServiceEvent e;
-	
+
 	public NetworkScannerWorker(Login login) {
 		this.login = login;
 	}
@@ -34,7 +33,6 @@ public class NetworkScannerWorker extends SwingWorker<Void, ServiceEvent>{
 		    	public void serviceAdded(ServiceEvent event){
 		    		System.out.println("Service added: " + event.toString());
 		    		eventType = 0;
-		    		e = event;
 		    		publish(event);
 		    	}
 
@@ -43,7 +41,6 @@ public class NetworkScannerWorker extends SwingWorker<Void, ServiceEvent>{
 					// TODO Auto-generated method stub
 					System.out.println("Service removed: " + event.toString());
 					eventType = 1;
-					e = event;
 					publish(event);
 				}
 
@@ -52,7 +49,6 @@ public class NetworkScannerWorker extends SwingWorker<Void, ServiceEvent>{
 					// TODO Auto-generated method stub
 					System.out.println("Service resolved: " + event.toString());
 					eventType = 2;
-					e = event;
 					publish(event);
 				}
 		    });

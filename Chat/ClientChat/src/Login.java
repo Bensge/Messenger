@@ -121,7 +121,7 @@ public class Login extends JFrame implements ActionListener{
 		JScrollPane scrollPane = new JScrollPane();
 		serverTable = new JTable(
 				new DefaultTableModel(
-					new Object[][]{{}}, new String[]{"Local Server"}
+					new Object[][]{}, new String[]{"Local Server"}
 				));
 		scrollPane.setViewportView(serverTable);
 		scrollPane.setBounds(20, 50, 200, 200);
