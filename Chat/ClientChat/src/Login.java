@@ -20,6 +20,7 @@ import javax.swing.JMenu;
 import Common.MessengerCommon;
 
 import java.awt.Font;
+import java.util.ArrayList;
 
 
 public class Login extends JFrame implements ActionListener{
@@ -34,6 +35,7 @@ public class Login extends JFrame implements ActionListener{
 	private JTextField IPTextField;
 	private JTextField nameTextField;
 	private JTable serverTable;
+	private ArrayList<ServiceEvent> servers;
 	JButton OK_Button;
 	JButton Cancel_Button;
 	/**
@@ -124,7 +126,8 @@ public class Login extends JFrame implements ActionListener{
 		scrollPane.setViewportView(serverTable);
 		scrollPane.setBounds(20, 50, 200, 200);
 		contentPane.add(scrollPane);
-		
+		servers = new ArrayList<ServiceEvent>();
+	
 		NetworkScannerWorker scannerWorker = new NetworkScannerWorker(this);
 		scannerWorker.execute();
 
@@ -151,6 +154,8 @@ public class Login extends JFrame implements ActionListener{
 	}
 
 	private void start() {
+		
+		
 		System.out.println("ok");
 		
 		if(nameTextField.getText().equals("")){
@@ -164,6 +169,14 @@ public class Login extends JFrame implements ActionListener{
 			address = "127.0.0.1";
 		else
 			address = IPTextField.getText();
+		
+		int serverColumn;
+		if ((serverColumn = serverTable.getSelectedColumn()) != -1)
+		{
+			ServiceEvent e = servers.get(serverColumn);
+			address = e.getInfo().getInetAddress().getHostAddress();
+			System.out.println("Address: " + address);
+		}
 		
 		socket = new ChatSocket(address, port, this);
 	}
@@ -190,7 +203,8 @@ public class Login extends JFrame implements ActionListener{
 	
 	  public void serviceResolved(ServiceEvent event) {
 		  DefaultTableModel model = (DefaultTableModel) serverTable.getModel();
-		  model.addRow(new Object[]{event.getName()});
+		  model.addRow(new Object[]{"Server " + event.getName()});
+		  servers.add(event);
 	  }
 
 }
