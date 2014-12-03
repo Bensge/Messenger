@@ -93,8 +93,8 @@ public class ChatSocket{
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
-	}
-    dns.addServiceListener("messenger._tcp.local.", new ServiceListener(){
+	} 
+    dns.addServiceListener("_messenger._tcp.local.", new ServiceListener(){
     	@Override
     	public void serviceAdded(ServiceEvent event){
     		System.out.println("Service added: " + event.toString());
@@ -113,7 +113,7 @@ public class ChatSocket{
 		}
     });
     
-    ServiceInfo[] services = dns.list("messenger._tcp.local.");
+    ServiceInfo[] services = dns.list("_messenger._tcp.local.");
     List<ServiceInfo> transcodingServices = new ArrayList();
     for(ServiceInfo service : services) {
         //if(service.getName().equals("messenger._tcp.local.")) {
