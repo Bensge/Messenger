@@ -100,11 +100,11 @@ private static final long serialVersionUID = 1L;
     menuBar.add(look);
     menuBar.add(other);
     
-    menuBar.setBackground(Color.BLACK);
+    menuBar.setBackground(brightColor);
    // topTopBox.add(menuBar);
     //topTopBox.set
     setJMenuBar(menuBar); 
-    changeGUI.setBackground(Color.BLACK);
+    changeGUI.setBackground(brightColor);
     
     Object[] columns = { "Time", "User", "Message" };
     Object[][] rowData = {};
