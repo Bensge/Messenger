@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -193,15 +194,25 @@ private static final long serialVersionUID = 1L;
 						int reply = JOptionPane.showConfirmDialog(textField, "Do you want to send the dropped file?", "File Transfer", JOptionPane.YES_NO_OPTION);
 						if (reply == JOptionPane.YES_OPTION)
 						{
-							if(fileName.endsWith(".png") || fileName.endsWith(".jpg") || fileName.endsWith(".jpeg"))
+							String date = new SimpleDateFormat("HH:mm").format(new Date());
+							
+							if (fileName.endsWith(".png") || fileName.endsWith(".jpg") || fileName.endsWith(".jpeg"))
+							{
+								//Handle image
 								dataListener.sendObject(f, true);
+								
+								addEntry(date, username, ImageIO.read(f));
+							}
 							else
+							{
 								dataListener.sendObject(f, false);
+								addEntry(date, username, "You sent file " + fileName);
+							}
 						}
 					
 						
 					dtde.dropComplete(true);
-					return;		
+					return;
 				
 			}
 				dtde.rejectDrop();
@@ -366,26 +377,26 @@ private static final long serialVersionUID = 1L;
 	  }
   }
 
-@Override
-public void actionPerformed(ActionEvent e) {
-	  if(e.getSource() == changeGUI)
-		  settingsListener.UIChanged();
-	  else if(e.getSource() == setMediaFolder)
-	  {
-		  JFileChooser fc = new JFileChooser();
-		  fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		  int result = fc.showOpenDialog(new JFrame());
-		  if (result == JFileChooser.APPROVE_OPTION)
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		  if(e.getSource() == changeGUI)
+			  settingsListener.UIChanged();
+		  else if(e.getSource() == setMediaFolder)
 		  {
-			  File dir = fc.getSelectedFile();
-			  System.out.println("Path: " + dir.getAbsolutePath());
+			  JFileChooser fc = new JFileChooser();
+			  fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			  int result = fc.showOpenDialog(new JFrame());
+			  if (result == JFileChooser.APPROVE_OPTION)
+			  {
+				  File dir = fc.getSelectedFile();
+				  System.out.println("Path: " + dir.getAbsolutePath());
+			  }
+			  
+			  settingsListener.pathChanged();
 		  }
-		  
-		  settingsListener.pathChanged();
-	  }
-	  else if(e.getSource() == mute){
-		  isMuted = !isMuted;
-	  }
-}
-
+		  else if(e.getSource() == mute){
+			  isMuted = !isMuted;
+		  }
+	}
+	
 }

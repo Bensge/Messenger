@@ -170,11 +170,11 @@ public void sendText(String msg){
 		  String date = "Not now";
 		  date = new SimpleDateFormat("HH:mm").format(new Date());
 		  
-		  gui.addEntry(date, "DUNNO", ((MessageImagePacket)packet).getBufferedImage());
+		  gui.addEntry(date, "Server", ((MessageImagePacket)packet).getBufferedImage());
 	  }
 	  else if (packet instanceof MessageFilePacket){
 		  String date = new SimpleDateFormat("HH:mm").format(new Date());
-		  gui.addEntry(date, "Mysterio", "You just got filed");
+		  gui.addEntry(date, "Server", "You received a file: " + ((MessageFilePacket)packet).fileName);
 	  }
 	  else if(packet instanceof MessageLoginPacket)
 	  {

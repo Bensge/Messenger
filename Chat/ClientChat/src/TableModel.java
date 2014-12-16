@@ -25,6 +25,7 @@ public class TableModel extends DefaultTableModel
 		renderer.setRowHighlighted(this.getRowCount(), highlightRow);
 		super.addRow(rowData);
 		renderer.scrollToBottom();
+		renderer.relayout();
 	}
 
 	public TableCellRenderer getRenderer(){

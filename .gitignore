@@ -90,3 +90,7 @@ local.properties
 *.class
 
 *.class
+
+*.class
+
+Chat/ClientChat/bin/ChatSocket.class
